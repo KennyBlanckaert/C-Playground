@@ -13,6 +13,15 @@
 *.tar
 *.zip
 
+# Directories #
+######################
+node_modules/
+.vscode/
+
+# Settings #
+######################
+settings.json
+
 # Logs and databases #
 ######################
 *.log
