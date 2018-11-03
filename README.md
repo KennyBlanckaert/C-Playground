@@ -6,6 +6,10 @@
 * b_tree implementation
 * kd_tree implementation
 
+> https://algoritmen.ahlun.be/Algoritmen *(Website)*  
+> https://github.com/ahluntang/tiwi-algoritmen/tree/doc-1.0.0 *(Github Algorithm Repository)*  
+> https://www.cs.usfca.edu/~galles/visualization/Algorithms.html *(Online program)*  
+
 ## Dynamic Programming
 
 * max_non_crossing_matching
