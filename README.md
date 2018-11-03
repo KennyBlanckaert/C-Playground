@@ -3,7 +3,7 @@
 ## Data Structures
 
 * redblack_tree implementation
-* b_tree implementation
+* b_tree implementation (2-3-4 tree)
 * kd_tree implementation
 
 > https://algoritmen.ahlun.be/Algoritmen *(Website)*  
