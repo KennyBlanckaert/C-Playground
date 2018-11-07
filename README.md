@@ -3,6 +3,7 @@
 ## Data Structures
 
 * redblack_tree implementation
+* splay_tree implementation
 * b_tree (2-3-4 tree) implementation 
 * kd_tree implementation
 
