@@ -1,0 +1,35 @@
+digraph {
+"40"[label="40"];
+"30"[label="30"];
+null1 [shape=point];
+"35"[label="35"];
+null2 [shape=point];
+null3 [shape=point];
+"35" -> null2;
+"35" -> null3;
+"30" -> null1;
+"30" -> "35";
+"50"[label="50"];
+"45"[label="45"];
+null4 [shape=point];
+null5 [shape=point];
+"45" -> null4;
+"45" -> null5;
+"55"[label="55"];
+"51"[label="51"];
+null6 [shape=point];
+null7 [shape=point];
+"51" -> null6;
+"51" -> null7;
+"60"[label="60"];
+null8 [shape=point];
+null9 [shape=point];
+"60" -> null8;
+"60" -> null9;
+"55" -> "51";
+"55" -> "60";
+"50" -> "45";
+"50" -> "55";
+"40" -> "30";
+"40" -> "50";
+}

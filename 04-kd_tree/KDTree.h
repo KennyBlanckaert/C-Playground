@@ -140,7 +140,7 @@ class KDTree : public unique_ptr<KDNode<k>> {
             out << "}";
         };
 
-        string drawRecursive(ostream& out,int& counter ) {
+        string drawRecursive(ostream& out, int& counter) {
 
             ostringstream content;
 
