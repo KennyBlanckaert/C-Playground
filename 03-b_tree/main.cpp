@@ -33,20 +33,31 @@ int main(int argc, char** argv) {
     while (file >> word) { 
         lowercase(word);
 
-        // cout << counter << " | " << "\"" << word << "\"";
-
         int occur = tree.search(word);
         tree.add(word, occur + 1);
-        // cout << " (" << (occur+1) << ")" << endl;
-
-        // cout << endl;
 
         counter++;
     } 
 
     cout << "Done..." << endl;
 
+    // Get results and sort
     vector<pair<string, unsigned int>> result = tree.getHighestOccurrences();
+    for (int i = 0; i < result.size(); i++) {
+        unsigned int hulp_num = result[i].second;
+        string hulp_str = result[i].first;
+		int j = i - 1;
+
+		while (j >= 0 && hulp_num > result[j].second){
+			result[j+1].second = result[j].second;
+            result[j+1].first = result[j].first;
+			j--;
+		}
+		result[j+1].second = hulp_num;
+        result[j+1].first = hulp_str;
+    }
+
+    // Print
     for (int i = 0; i < result.size(); i++) {
         cout << result[i].second << " " << result[i].first << endl;
     }

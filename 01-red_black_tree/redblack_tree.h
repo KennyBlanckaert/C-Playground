@@ -1,5 +1,5 @@
-#ifndef __RZWTree_H
-#define __RZWTree_H
+#ifndef __RBTree_H
+#define __RBTree_H
 
 #include <cstdlib>
 #include <iostream>
@@ -12,46 +12,46 @@
 #include <cassert>
 
 /*
-    BELANGRIJK!!
+    IMPORTANT!!
 
-    this                =>      pointer naar een RZWTree
-    *this               =>      RZWTree                         =>  unique_ptr<RZWNode<Key>>
-    **this              =>      RZWNode
+    this                =>      pointer to RBTree
+    *this               =>      RBTree                         =>  unique_ptr<RBNode<Key>>
+    **this              =>      RBNode
 
-    this->get()         =>      RZWNode<Key>>*
-    (*(this->get()))    =>      RZWNode<Key>>
+    this->get()         =>      RBNode<Key>>*
+    (*(this->get()))    =>      RBNode<Key>>
 
-    dus (*this)->... spreekt velden het RZWNode aan!!
+    dus (*this)->... spreekt velden het RBNode aan!!
 */
 
 using namespace std;
 
 // Enumeration color
-enum RZWColor {red, black};
+enum RBColor {red, black};
 
 // Node class
 template <class Key>
-class RZWNode;
+class RBNode;
 
 // Tree class
 template <class Key>
-class RZWTree : public unique_ptr<RZWNode<Key>>{
+class RBTree : public unique_ptr<RBNode<Key>>{
     public:
-        using unique_ptr<RZWNode<Key>>::unique_ptr;
+        using unique_ptr<RBNode<Key>>::unique_ptr;
 
         // Constructors
-        RZWTree() { };
-        RZWTree(unique_ptr<RZWNode<Key>>&& k) : unique_ptr<RZWNode<Key>>(move(k)) { };
-        RZWTree(const vector<Key>& keys, const vector<Key>& red_keys) { 
+        RBTree() { };
+        RBTree(unique_ptr<RBNode<Key>>&& k) : unique_ptr<RBNode<Key>>(move(k)) { };
+        RBTree(const vector<Key>& keys, const vector<Key>& red_keys) { 
             for (int i = 0; i < keys.size(); i++) {
-                this->add(keys[i], RZWColor::black);
+                this->add(keys[i], RBColor::black);
             }
 
             convertToRed(red_keys);
         };
 
-        // Functie-declaraties
-        void inorder(std::function<void(const RZWNode<Key>&)> visit) const {
+        // Functie-declarations
+        void inorder(std::function<void(const RBNode<Key>&)> visit) const {
             if (*this){
                 (*this)->left.inorder(visit);
                 visit(**this);
@@ -62,22 +62,22 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
         bool treeOK() {
             Key* previous;
             bool valid = true;
-            inorder([&previous,&valid](const RZWNode<Key>& node) {
+            inorder([&previous,&valid](const RBNode<Key>& node) {
                 if (previous && node.key > *previous){
-                    throw "Verkeerde volgorde\n";
+                    throw "Wrong order\n";
                 }
                 if (node.parent && node.parent->left.get() != &node && node.parent->right.get() != &node){
                     std::ostringstream fout;
-                    fout << "Ongeldige parentpointer bij node " << node.key << "\n";
-                    fout << "wijst naar " << node.parent->key << "\n";
+                    fout << "Invalid parent pointer " << node.key << "\n";
+                    fout << "points to " << node.parent->key << "\n";
                     throw fout;
                     return;
                 }
-                if (!node.parent && node.color == RZWColor::red) {
-                    throw "Rode wortel";
+                if (!node.parent && node.color == RBColor::red) {
+                    throw "Root is red";
                 }
-                if (node.parent && node.parent->color == RZWColor::red && node.color == RZWColor::red) {
-                    throw "parent heeft red child";
+                if (node.parent && node.parent->color == RBColor::red && node.color == RBColor::red) {
+                    throw "parent has red child";
                 }
                 return;
             });
@@ -86,15 +86,15 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
         }
 
         void write(ostream& os) const {
-            inorder([&os](const RZWNode<Key>& node) {
-                string k = node.color == RZWColor::black ? "black" : "red";
+            inorder([&os](const RBNode<Key>& node) {
+                string k = node.color == RBColor::black ? "black" : "red";
                 os<<"("<<node.key<<", "<<k<<")" ;
-                os<<"\n  Linkerchild: ";
+                os<<"\n  left child: ";
                 if (node.left)
                     os<<node.left->key;
                 else
                     os<<"-----";
-                os<<"\n  Rechterchild: ";
+                os<<"\n  right child: ";
                 if (node.right)
                     os<<node.right->key;
                 else
@@ -105,14 +105,12 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
 
         void rotate(bool left) {
             if (left) {
-                RZWTree<Key> child = move((*this)->right);
+                RBTree<Key> child = move((*this)->right);
 
-                // Pointer verleggen
                 (*this)->right = move(child->left);
                 child.get()->left = move(*this);
                 *this = move(child);
 
-                // parents wijzigen
                 (*this)->parent = (*this)->left->parent;
                 (*this)->left->parent = this->get();
                 if ((*this)->left->right) {
@@ -120,14 +118,12 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
                 }
             }
             else {
-                RZWTree<Key> child = move((*this)->left);
+                RBTree<Key> child = move((*this)->left);
 
-                // Pointer verleggen
                 (*this)->left = move(child->right);
                 child.get()->right = move(*this);
                 *this = move(child);
 
-                // parents wijzigen
                 (*this)->parent = (*this)->right->parent;
                 (*this)->right->parent = this->get();
                 if ((*this)->right->left) {
@@ -135,10 +131,10 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
                 }
             }
         }
-        void add(const Key& key, RZWColor color = RZWColor::red) {
+        void add(const Key& key, RBColor color = RBColor::red) {
 
-            RZWTree<Key>* current = this;
-            RZWNode<Key>* parent = 0;
+            RBTree<Key>* current = this;
+            RBNode<Key>* parent = 0;
             while (*current && current->get()->key != key) {
                 parent = current->get();
                 if (key < current->get()->key) {
@@ -149,7 +145,7 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
                 }
             }
 
-            RZWTree<Key> add = make_unique<RZWNode<Key>>(key, color, parent);
+            RBTree<Key> add = make_unique<RBNode<Key>>(key, color, parent);
             *current = move(add);
 
             this->checkColors(current);
@@ -160,8 +156,8 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
             for (int i = 0; i < red_keys.size(); i++) {
                 Key k = red_keys[i];
 
-                RZWTree<Key>* current = this;
-                RZWNode<Key>* parent = 0;
+                RBTree<Key>* current = this;
+                RBNode<Key>* parent = 0;
                 while (*current && current->get()->key != k) {
                     parent = current->get();
                     if (k < current->get()->key) {
@@ -172,21 +168,21 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
                     }
                 }
 
-                current->get()->color = RZWColor::red;
+                current->get()->color = RBColor::red;
             }
         }
 
-        void getFamily(const RZWNode<Key>* c, RZWTree<Key>*& p, RZWTree<Key>*& g, RZWTree<Key>*& u) {
+        void getFamily(const RBNode<Key>* c, RBTree<Key>*& p, RBTree<Key>*& g, RBTree<Key>*& u) {
             
-            RZWNode<Key>* p_node = c->parent;
-            RZWNode<Key>* g_node = p_node->parent;
+            RBNode<Key>* p_node = c->parent;
+            RBNode<Key>* g_node = p_node->parent;
 
             // Get grandparent tree (if exists)
             if (g_node == this->get()) {
                 g = this; 
             }
             else {
-                RZWNode<Key>* top_node = g_node->parent;
+                RBNode<Key>* top_node = g_node->parent;
                 if (g_node == top_node->left.get()) {
                     g = &(top_node->left);
                 }
@@ -205,68 +201,68 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
             }
         }
 
-        void checkColors(RZWTree<Key>* current) {
+        void checkColors(RBTree<Key>* current) {
             
-            if ( (*current)->color == RZWColor::red && (*current)->parent->color == RZWColor::red ) {                
+            if ( (*current)->color == RBColor::red && (*current)->parent->color == RBColor::red ) {                
 
                 // Nodes: current, parent, grandparent, uncle
-                RZWNode<Key>* c = current->get();
-                RZWTree<Key>* p = nullptr;
-                RZWTree<Key>* g = nullptr;
-                RZWTree<Key>* u = nullptr;
+                RBNode<Key>* c = current->get();
+                RBTree<Key>* p = nullptr;
+                RBTree<Key>* g = nullptr;
+                RBTree<Key>* u = nullptr;
 
                 // Get nodes
                 this->getFamily(c, p, g, u);
-                cout << "Current node: " << c->key << " (" << (c->color == RZWColor::red ? "red" : "black") << ")" << endl;
-                cout << "p node: " << p->get()->key << " (" << (p->get()->color == RZWColor::red ? "red" : "black") << ")" << endl;
-                cout << "g node: " << g->get()->key << " (" << (g->get()->color == RZWColor::red ? "red" : "black") << ")" << endl;
-                cout << "u node: " << u->get()->key << " (" << (u->get()->color == RZWColor::red ? "red" : "black") << ")" << endl;
+                cout << "Current node: " << c->key << " (" << (c->color == RBColor::red ? "red" : "black") << ")" << endl;
+                cout << "p node: " << p->get()->key << " (" << (p->get()->color == RBColor::red ? "red" : "black") << ")" << endl;
+                cout << "g node: " << g->get()->key << " (" << (g->get()->color == RBColor::red ? "red" : "black") << ")" << endl;
+                cout << "u node: " << u->get()->key << " (" << (u->get()->color == RBColor::red ? "red" : "black") << ")" << endl;
 
                 // First scenario
-                if (u->get()->color == RZWColor::red) {
-                    u->get()->color = RZWColor::black;
-                    p->get()->color = RZWColor::black;
+                if (u->get()->color == RBColor::red) {
+                    u->get()->color = RBColor::black;
+                    p->get()->color = RBColor::black;
 
                     if (g) {
-                        g->get()->color = RZWColor::red;
+                        g->get()->color = RBColor::red;
                     }
                     else {
-                        this->get()->color = RZWColor::red;
+                        this->get()->color = RBColor::red;
                     }
                 }
 
                 // Second scenario
-                else if (u->get()->color == RZWColor::black) {
+                else if (u->get()->color == RBColor::black) {
 
                     // p is linkerchild van g
                     if (g->get()->left.get()->key == p->get()->key) {
                         
-                        // c is rechterchild van p
+                        // c is right child van p
                         if (p->get()->right && p->get()->right.get()->key == c->key) {
                             p->rotate(true);
                         }
 
-                        p->get()->color = RZWColor::black;
-                        g->get()->color = RZWColor::red;
+                        p->get()->color = RBColor::black;
+                        g->get()->color = RBColor::red;
                         g->rotate(false);
 
                     }
-                    // p is rechterchild van g
+                    // p is right child van g
                     else if (g->get()->right.get()->key == p->get()->key) {
                         
-                        // c is linkerchild van p
+                        // c is left child van p
                         if (p->get()->left && p->get()->left.get()->key == c->key) {
                             p->rotate(false);
                         }
 
-                        p->get()->color = RZWColor::black;
-                        g->get()->color = RZWColor::red;
+                        p->get()->color = RBColor::black;
+                        g->get()->color = RBColor::red;
                         g->rotate(true);
 
                     }
                 }
 
-                // Bottom-Up werken
+                // Repeat bottom-p
                 if (g != this) {    
                     this->checkColors(g);
                 }
@@ -275,23 +271,23 @@ class RZWTree : public unique_ptr<RZWNode<Key>>{
 };
 
 template <class Key>
-class RZWNode {
-    friend class RZWTree<Key>;
+class RBNode {
+    friend class RBTree<Key>;
 
     public:
 
         // Constructors
-        RZWNode() : parent(0) { };
-        RZWNode(const Key& sl) : key{sl}, parent(0), color(red) { };
-        RZWNode(const Key& sl, RZWColor k) : key(sl), parent(0), color(k) { };
-        RZWNode(const Key& sl, RZWColor k, RZWNode<Key>* o) : key(sl), parent(o), color(k) { };
-        RZWNode(Key&& sl) : key{move(sl)}, parent(0), color(red) { };
+        RBNode() : parent(0) { };
+        RBNode(const Key& sl) : key{sl}, parent(0), color(red) { };
+        RBNode(const Key& sl, RBColor k) : key(sl), parent(0), color(k) { };
+        RBNode(const Key& sl, RBColor k, RBNode<Key>* o) : key(sl), parent(o), color(k) { };
+        RBNode(Key&& sl) : key{move(sl)}, parent(0), color(red) { };
 
         // Fields
         Key key;
-        RZWNode<Key>* parent;
-        RZWTree<Key> left, right;
-        RZWColor color;
+        RBNode<Key>* parent;
+        RBTree<Key> left, right;
+        RBColor color;
 };
 
 #endif

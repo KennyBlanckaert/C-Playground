@@ -17,7 +17,7 @@ class BNode {
 
         /* Constructors & Destructor*/
         BNode() : BNode<Key, Data, m>(true) { };                                                                 // This calls the second constructor
-        BNode(bool is_leaf_node) : k(0), is_leaf_node(is_leaf_node) { /*assert(++(this->crashtest) > 3);*/ };    // This creates an empty Bnode with no children
+        BNode(bool is_leaf_node) : k(0), is_leaf_node(is_leaf_node) { /*assert(++(this->crashtest) > 10);*/ };   // This creates an empty Bnode with no children
         BNode(unsigned int l) : BNode<Key, Data, m>(false) { this->index[0] = l; };                              // This creates an empty BNode with an existing left child (used when splitted). First KEY added afterward MUST be GREATER than child !!!
         BNode(unsigned int l, const Key& sl, const Data& d, unsigned int r) : BNode<Key, Data, m>(false) {       // This creates an BNode with key, value and 2 child nodes
             this->index[0] = l;

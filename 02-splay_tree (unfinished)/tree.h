@@ -52,7 +52,7 @@ class Tree : unique_ptr<Node<Key>> {
             Tree<Key> add = make_unique<Node<Key>>(key, parent);
             (*current) = move(add);
 
-            //splay(current);
+            splay(current);
         };
 
         void splay(Tree<Key>* last_added) {
@@ -83,6 +83,8 @@ class Tree : unique_ptr<Node<Key>> {
                 else {
                     parent->rotate(false);
                 }
+
+                break;
             }
         };
 

@@ -44,22 +44,9 @@ class BTree {
                     return current_node.get_value(key);
                 }
 
-                // cout << "LIST: ";
-                // for (int i = 1; i <= current_node.k; i++) {
-                //     cout << current_node.key[i] << " - ";
-                // }
-                // cout << endl;
-
                 current_index = current_node.get_childindex(key);
                 current_node = this->disk.read(current_index);
             }
-
-            // last node (leaf)
-            // cout << "LIST: ";
-            // for (int i = 1; i <= current_node.k; i++) {
-            //     cout << current_node.key[i] << " - ";
-            // }
-            // cout << "(leaf)" << endl;
 
             if (current_node.contains(key)) {
                 return current_node.get_value(key);
@@ -80,11 +67,6 @@ class BTree {
 
             stack<unsigned int> parent_stack;
 
-            // top-down-ascend
-            // TODO when FOUND:
-            //      update_value
-            //      if (key is part of the root node) root = changed_node
-            //      overwrite disk
             while (!current_node.is_leaf()) {
 
                 parent_stack.push(current_index);
@@ -115,17 +97,11 @@ class BTree {
                 return;
             }
 
-            // cout << "ADDING: " << key << endl;
+            // IMPROVEMENT: only split when adding to a full node!
             current_node.add(key, data);
-            // cout << "LIST: ";
-            // for (int i = 1; i <= current_node.k; i++) {
-            //     cout << current_node.key[i] << " - ";
-            // }
-            // cout << endl;
 
-            // Split if node is full
+            // Start splitting (up to the root if needed)
             while (current_node.is_full() && current_index != this->rootindex && !parent_stack.empty()) {
-
                 Key key_to_move_up;
                 Data value_to_move_up;
                 BNode<Key, Data, m> new_brother;
@@ -149,7 +125,9 @@ class BTree {
             // Root is not full
             if (!this->root.is_full()) {
                 disk.overwrite(current_index, current_node);
-            } else {
+            } 
+            // Root is full
+            else {
                 Key key_to_move_up;
                 Data value_to_move_up;
                 BNode<Key, Data, m> new_brother;
@@ -157,7 +135,7 @@ class BTree {
                                                                                                     /*                /    \                    */
                 disk.overwrite(this->rootindex, this->root);                                        /*               /      \                   */  
                 unsigned int new_brother_index = disk.write(new_brother);                           /*              /        \                  */
-                                                                                                    /*     old_rootindex  new_brother_index     */
+                                                                                                    /*     old_rootindex  new_brother_index     */          
                 // create new root node & add to disk                                                                                 
                 this->root = BNode<Key, Data, m>(this->rootindex, key_to_move_up, value_to_move_up, new_brother_index);
                 this->rootindex = disk.write(this->root);
@@ -219,7 +197,7 @@ class BTree {
 
         // To get highest occurences
         static Data min;
-        vector<pair<Key, Data>> max_occurrences;                    /* A set can not be used, because set-data can NOT be modified!!! */
+        vector<pair<Key, Data>> max_occurrences;                    /* A set can not be used, because set-data can NOT be modified!!! (IMPROVEMENT: iterator) */
 };
 
 template<class Key, class Data, unsigned int m>
