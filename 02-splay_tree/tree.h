@@ -49,9 +49,11 @@ class Tree : unique_ptr<Node<Key>> {
                 }
             }
 
+            cout << "adding" << key << endl;
             Tree<Key> add = make_unique<Node<Key>>(key, parent);
             (*current) = move(add);
 
+            cout << "start splay" << endl;
             splay(current);
         };
 
@@ -63,10 +65,10 @@ class Tree : unique_ptr<Node<Key>> {
                 Node<Key>* p = last_added->get()->parent;
                 if (p->parent) {
                     Node<Key>* tmp = p->parent;
-                    if (tmp->left.get()->key == p->key) {
+                    if (tmp->left.get() && tmp->left.get()->key == p->key) {
                         parent = &(tmp->left);
                     }
-                    else {
+                    else if (tmp->right.get() && tmp->right.get()->key == p->key) {
                         parent = &(tmp->right);
                     }
                 }
@@ -74,17 +76,22 @@ class Tree : unique_ptr<Node<Key>> {
                     parent = this;
                 }
 
+                cout << "parent = " << parent->get()->key << endl;
+
                 // Rotate right is node is left child of his parent
                 // Rotate left is node is right child of his parent
                 // Stop is node is the root (no parent)
-                if (parent->get()->left.get()->key == last_added->get()->key) {
+                if (parent->get()->left && parent->get()->left.get()->key == last_added->get()->key) {
+                    cout << "rotate right" << endl;
                     parent->rotate(true);
                 }
                 else {
+                    cout << "rotate left" << endl;
                     parent->rotate(false);
                 }
 
-                break;
+                // Because the node became the parent in rotate()
+                last_added = parent;
             }
         };
 
@@ -93,9 +100,9 @@ class Tree : unique_ptr<Node<Key>> {
             // Right Rotate
             if (right) {
 
-                Tree<Key> child = move((*this)->left);
+                Tree<Key> child = move(this->get()->left);
 
-                (*this)->left = move(child->right);
+                (*this)->left = move(child.get()->right);
                 child.get()->right = move(*this);
                 *this = move(child);
 
@@ -108,9 +115,9 @@ class Tree : unique_ptr<Node<Key>> {
             // Left Rotate
             else {
 
-                Tree<Key> child = move((*this)->right);
+                Tree<Key> child = move(this->get()->right);
 
-                (*this)->right = move(child->left);
+                (*this)->right = move(child.get()->left);
                 child.get()->left = move(*this);
                 *this = move(child);
 
