@@ -97,10 +97,10 @@ class BTree {
                 return;
             }
 
-            // IMPROVEMENT: only split when adding to a full node!
+            // add
             current_node.add(key, data);
 
-            // Start splitting (up to the root if needed)
+            // start splitting (up to the root if needed)
             while (current_node.is_full() && current_index != this->rootindex && !parent_stack.empty()) {
                 Key key_to_move_up;
                 Data value_to_move_up;
@@ -117,16 +117,16 @@ class BTree {
                 current_node.add(key_to_move_up, value_to_move_up, new_brother_index);
             }
 
-            // Are we at the root?
+            // are we at the root?
             if (current_index == this->rootindex) {
                 this->root = current_node;
             }
 
-            // Root is not full
+            // root is not full
             if (!this->root.is_full()) {
                 disk.overwrite(current_index, current_node);
             } 
-            // Root is full
+            // root is full
             else {
                 Key key_to_move_up;
                 Data value_to_move_up;
@@ -144,7 +144,7 @@ class BTree {
 
         void save(const Key& key, const Data& data) {
 
-            // Add?
+            // add?
             if (data > this->min) {
 
                 // Already in set?
@@ -180,6 +180,7 @@ class BTree {
             }
         };
 
+        /* IMPROVEMENT: iterator (a separated save function is used now) */
         vector<pair<Key, Data>>& getHighestOccurrences() {
             return this->max_occurrences;
         }
@@ -188,16 +189,16 @@ class BTree {
 
         /* Fields */
         //
-        // Disk where nodes are stored
-        // The root node
-        // The root index on the disk
+        // disk where nodes are stored
+        // the root node
+        // the root index on the disk
         Disk<BNode<Key, Data, m>>& disk;
         BNode<Key, Data, m> root;
         unsigned int rootindex;
 
-        // To get highest occurences
+        // to get highest occurences
         static Data min;
-        vector<pair<Key, Data>> max_occurrences;                    /* A set can not be used, because set-data can NOT be modified!!! (IMPROVEMENT: iterator) */
+        vector<pair<Key, Data>> max_occurrences;                  
 };
 
 template<class Key, class Data, unsigned int m>

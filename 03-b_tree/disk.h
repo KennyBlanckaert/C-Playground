@@ -16,8 +16,8 @@ class Disk: private std::map<unsigned int, Knoop>
 
         /* Functions */
 
-        // Write T to disk
-        // Return index to T
+        // write T to disk
+        // return index to T
         unsigned int write(const Knoop& knoop) {
             
             counter++;
@@ -26,17 +26,17 @@ class Disk: private std::map<unsigned int, Knoop>
             return counter;
         }
 
-        // Remove index
+        // remove index
         void remove(unsigned int i) {
             this->erase(i);
         }
 
-        // Write T to disk on specific index 
+        // write T to disk on specific index 
         void overwrite(const unsigned int i, const Knoop& knoop) {
             this->operator[](i) = knoop;
         }
 
-        // Read Knoop from disk
+        // read Knoop from disk
         Knoop& read(const unsigned int i) {
             return this->operator[](i);
         }

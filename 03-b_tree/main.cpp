@@ -14,18 +14,17 @@ void lowercase(string& word) { transform(word.begin(), word.end(), word.begin(),
 
 int main(int argc, char** argv) {
 
-    // Disk stores BNodes
+    // disk stores BNodes
     // BNode consist of:
     //              a string (word)
     //              a unsigned integer (times added)
     //              KNOOP_SIZE (numsber of keys in node)
     // BTree uses Disk to access BNodes
-    // 3 BNodes accesible at a time (crashtest)
     Disk<BNode<string, unsigned int, NODE_SIZE>> disk;
     BTree<string, unsigned int, NODE_SIZE> tree(disk);
 
-    // Open file
-    // Read words
+    // open file
+    // read words
     ifstream file("words.txt");
 
     string word;
@@ -39,9 +38,7 @@ int main(int argc, char** argv) {
         counter++;
     } 
 
-    cout << "Done..." << endl;
-
-    // Get results and sort
+    // get results and sort
     vector<pair<string, unsigned int>> result = tree.getHighestOccurrences();
     for (int i = 0; i < result.size(); i++) {
         unsigned int hulp_num = result[i].second;
@@ -57,7 +54,7 @@ int main(int argc, char** argv) {
         result[j+1].first = hulp_str;
     }
 
-    // Print
+    // print
     for (int i = 0; i < result.size(); i++) {
         cout << result[i].second << " " << result[i].first << endl;
     }

@@ -16,10 +16,10 @@ class BNode {
     public:
 
         /* Constructors & Destructor*/
-        BNode() : BNode<Key, Data, m>(true) { };                                                                 // This calls the second constructor
-        BNode(bool is_leaf_node) : k(0), is_leaf_node(is_leaf_node) { /*assert(++(this->crashtest) > 10);*/ };   // This creates an empty Bnode with no children
-        BNode(unsigned int l) : BNode<Key, Data, m>(false) { this->index[0] = l; };                              // This creates an empty BNode with an existing left child (used when splitted). First KEY added afterward MUST be GREATER than child !!!
-        BNode(unsigned int l, const Key& sl, const Data& d, unsigned int r) : BNode<Key, Data, m>(false) {       // This creates an BNode with key, value and 2 child nodes
+        BNode() : BNode<Key, Data, m>(true) { };                                                                 // this calls the second constructor
+        BNode(bool is_leaf_node) : k(0), is_leaf_node(is_leaf_node) { /*assert(++(this->crashtest) > 10);*/ };   // this creates an empty Bnode with no children
+        BNode(unsigned int l) : BNode<Key, Data, m>(false) { this->index[0] = l; };                              // this creates an empty BNode with an existing left child (used when splitted). First KEY added afterward MUST be GREATER than child !!!
+        BNode(unsigned int l, const Key& sl, const Data& d, unsigned int r) : BNode<Key, Data, m>(false) {       // this creates an BNode with key, value and 2 child nodes
             this->index[0] = l;
             this->index[1] = r;
             this->key[1] = sl;
@@ -38,7 +38,7 @@ class BNode {
 
         /* Functions */
 
-        // Check if node contains key
+        // check if node contains key
         unsigned int contains(const Key& key) const {
 
             int i = 1;
@@ -52,13 +52,13 @@ class BNode {
             return 0;
         };
 
-        // Check if node is a leaf
+        // check if node is a leaf
         bool is_leaf() const { return this->is_leaf_node; };
 
-        // Check if node is full
+        // check if node is full
         bool is_full() const { return (this->k == m); };
 
-        // Get corresponding data from key
+        // get corresponding data from key
         Data get_value(const Key& key) const { 
             
             int position = this->contains(key);
@@ -70,7 +70,7 @@ class BNode {
             }
         };
 
-        // Change corresponding data from key
+        // change corresponding data from key
         void update_value(const Key& key, const Data& d) {
 
             int position = this->contains(key);
@@ -82,10 +82,10 @@ class BNode {
             }
         };
 
-        // Add key (with empty right child node) in sorted order
+        // add key (with empty right child node) in sorted order
         void add(const Key& key, const Data& data) { this->add(key, data, Disk<BNode<Key, Data, m>>::NULL_BLOKINDEX); };
 
-        // Add key (with existing right child node) in sorted order
+        // add key (with existing right child node) in sorted order
         void add(const Key& key, const Data& data, unsigned int r) {
 
             if (this->contains(key)) {
@@ -111,7 +111,7 @@ class BNode {
             
         };
 
-        // Returns right childnode of given key
+        // returns right childnode of given key
         unsigned int get_childindex(const Key& key) const {
 
             if (this->contains(key)) {
@@ -128,22 +128,22 @@ class BNode {
             
         };
 
-        // Return number of children
+        // return number of children
         unsigned int count_children() const { return (this->k + 1); };
 
-        // Set children
+        // set children
         void set_children(int children) { this->k = (children-1); };
 
-        // Split a full node
+        // split a full node
         void split(BNode<Key, Data, m>& brother, Key& key, Data& data) {
 
-            // Get middle
+            // get middle
             int middle = ceil(this->k / 2);
 
-            // Set property of new node
+            // set property of new node
             brother.is_leaf_node = this->is_leaf_node;
 
-            // Move keys, data and if not a leaf, the childindexes of all keys right of middle
+            // move keys, data and if not a leaf, the childindexes of all keys right of middle
             key = this->key[middle];
             data = this->data[middle];
             if (!this->is_leaf_node) { brother.index[0] = this->index[middle]; }
@@ -154,18 +154,18 @@ class BNode {
                 if (!this->is_leaf_node) { brother.index[i - middle] = this->index[i]; }
             }
 
-            // Reset number of children (or set all 'deleted' keys, data and indexes to 0)
+            // reset number of children (or set all 'deleted' keys, data and indexes to 0)
             brother.k = this->k - middle;
             this->k = middle - 1;
         };
 
-        // Get all indexes
+        // get all indexes
         vector<unsigned int>& get_indexes() {
             vector<unsigned int> indexes(begin(this->index), end(this->index));
             return indexes;
         }
         
-        // Access Key on specific index
+        // access Key on specific index
         Key operator[](int index) const {
             
             if (index > 0 && index <= this->k) {
@@ -180,11 +180,11 @@ class BNode {
 
         /* Fields */
         //
-        // Max children in a node
-        // Array of keys                        (where index 0 keeps unused)
-        // Array of values                      (where index 0 keeps unused)
-        // Array of indexes to nodes on disk
-        // Number of children
+        // max children in a node
+        // array of keys                        (index 0 stays unused)
+        // array of values                      (index 0 stays unused)
+        // array of indexes to nodes on disk
+        // number of children
         // is_leaf_node
         // crashtest can not be higher than 3
         const static int KEYS_IN_NODE = m + 1;
