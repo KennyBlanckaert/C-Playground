@@ -18,7 +18,7 @@ class KDTree : public unique_ptr<KDNode<k>> {
 
         /* Constructor */
         KDTree() { };
-        KDTree(unique_ptr<KDNode<k>>&& u) : unique_ptr<KDNode<k>>(move(u)) { };                 // Makes it possible to cast a unique_ptr<KDNode<k>> to a KDTree<k>
+        KDTree(unique_ptr<KDNode<k>>&& u) : unique_ptr<KDNode<k>>(move(u)) { };                 /* Makes it possible to cast a unique_ptr<KDNode<k>> to a KDTree<k> */
 
         /* Copy constructor & operator  */
         KDTree(const KDTree<k>& other) = default;
@@ -81,7 +81,7 @@ class KDTree : public unique_ptr<KDNode<k>> {
 
         Point<k> getClosestPoint(Point<k>& point) {
 
-            // Top-down to leaf (current-best)
+            // top-down to leaf (current-best)
             unsigned int dim = 0;
             KDTree<k>* current = this;
             KDNode<k>* parent = 0;
@@ -96,14 +96,14 @@ class KDTree : public unique_ptr<KDNode<k>> {
                 }
             }
 
-            // Current-best found
+            // current-best found
             Point<k> shortest_point(parent->point);
             unsigned int shortest_distance = point.distanceTo(shortest_point);
 
-            // Bottom-up
+            // bottom-up
             current = this;
             while (*current) {
-                if (point == shortest_point) {                                  // Unvalid condition: given point parameter could be a leaf, so that the shortest point is already set to the SAME point!
+                if (point == shortest_point) {                                  /* unvalid condition: given point parameter could be a leaf, so that the shortest point is already set to the SAME point! */
                     shortest_point = current->get()->point;
                     shortest_distance = point.distanceTo(shortest_point);
                 }
@@ -122,7 +122,7 @@ class KDTree : public unique_ptr<KDNode<k>> {
                 }
             }
 
-            // Searching other part of the hypersphere by looking to points within the distance-radius
+            // searching other part of the hypersphere by looking to points within the distance-radius !!!
 
             return shortest_point;
 

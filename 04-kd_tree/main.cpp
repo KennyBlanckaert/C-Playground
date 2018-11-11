@@ -12,8 +12,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    // Open file
-    // Read coordinates
+    // open file
+    // read coordinates
     ifstream file("100points.txt");
 
     if (file.is_open()) {
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
         cout << "Tree created" << endl << endl;
 
         cout << "Drawing graph..." << endl;
-        tree.draw("graph.dot");
+        tree.draw("kd_tree.dot");
         cout << "Graph created" << endl << endl;
 
 
@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
         cout << "Point (60, 242) found? : " << (tree.search(p5)? "Yes" : "No") << endl;
         cout << endl;
 
-        // "Nearest point algorithm" not complete!
+        // "nearest point algorithm" incomplete!
         Point<COORDINATE_SYSTEM_AXES> closestToP1 = tree.getClosestPoint(p1);
         Point<COORDINATE_SYSTEM_AXES> closestToP3 = tree.getClosestPoint(p3);
         Point<COORDINATE_SYSTEM_AXES> closestToP5 = tree.getClosestPoint(p5);
