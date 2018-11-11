@@ -1,6 +1,6 @@
 # C-Coding
 
-## Data Structures
+## Trees
 
 * 01 redblack_tree implementation
 * 02 splay_tree implementation
