@@ -51,58 +51,6 @@ class RBTree : public unique_ptr<RBNode<Key>>{
         };
 
         // Functie-declarations
-        void inorder(std::function<void(const RBNode<Key>&)> visit) const {
-            if (*this){
-                (*this)->left.inorder(visit);
-                visit(**this);
-                (*this)->right.inorder(visit);
-            };
-        };
-
-        bool treeOK() {
-            Key* previous;
-            bool valid = true;
-            inorder([&previous,&valid](const RBNode<Key>& node) {
-                if (previous && node.key > *previous){
-                    throw "Wrong order\n";
-                }
-                if (node.parent && node.parent->left.get() != &node && node.parent->right.get() != &node){
-                    std::ostringstream fout;
-                    fout << "Invalid parent pointer " << node.key << "\n";
-                    fout << "points to " << node.parent->key << "\n";
-                    throw fout;
-                    return;
-                }
-                if (!node.parent && node.color == RBColor::red) {
-                    throw "Root is red";
-                }
-                if (node.parent && node.parent->color == RBColor::red && node.color == RBColor::red) {
-                    throw "parent has red child";
-                }
-                return;
-            });
-
-            return valid;
-        }
-
-        void write(ostream& os) const {
-            inorder([&os](const RBNode<Key>& node) {
-                string k = node.color == RBColor::black ? "black" : "red";
-                os<<"("<<node.key<<", "<<k<<")" ;
-                os<<"\n  left child: ";
-                if (node.left)
-                    os<<node.left->key;
-                else
-                    os<<"-----";
-                os<<"\n  right child: ";
-                if (node.right)
-                    os<<node.right->key;
-                else
-                    os<<"-----";
-                os<<"\n";
-            });
-        }
-
         void rotate(bool left) {
             if (left) {
                 RBTree<Key> child = move((*this)->right);
@@ -267,6 +215,46 @@ class RBTree : public unique_ptr<RBNode<Key>>{
                     this->checkColors(g);
                 }
             }
+        };
+
+        void draw(const char* filename) {
+
+            ofstream out(filename);
+            assert(out);
+
+            int counter = 0;
+
+            out << "digraph {\n";
+            this->drawRecursive(out, counter);
+            out << "}";
+        };
+
+        string drawRecursive(ostream& out, int& counter) {
+
+            ostringstream content;
+
+            if (!*this){
+                content << "null" << ++counter;
+                out << content.str() << " [shape=point];\n";
+            }
+            else {
+                content << '"' << this->get()->key << '"';
+                if (this->get()->color == RBColor::black) {
+                    out << content.str() << "[fillcolor=black style=filled fontcolor=white label=\"" << this->get()->key << "\"]";
+                }
+                else if (this->get()->color == RBColor::red) {
+                    out << content.str() << "[fillcolor=red style=filled label=\"" << this->get()->key << "\"]";
+                }
+                out << ";\n";
+
+                string left_child = this->get()->left.drawRecursive(out, counter);
+                string right_child = this->get()->right.drawRecursive(out, counter);
+
+                out << content.str() << " -> " << left_child << ";\n";
+                out << content.str() << " -> " << right_child << ";\n";
+            };
+
+            return content.str();
         };
 };
 
