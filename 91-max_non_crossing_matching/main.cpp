@@ -4,22 +4,29 @@
 
 using namespace std;
 
+
+/* 1000 malls & football stadiums 
+ * all malls are on one side of the river and the football stadiums are on the other side of the river
+ * each project developer owns one malls & one football stadium (not always straight over the river)
+ * each project developer pays for a bridge between his mall & football stadium
+ * this program finds the highest profit that can be made, without having crossing bridges
+ */
 int main() {
 
-	// Open file
+	// open file
     ifstream file{"bridges.dat"};
 
-	// Read amount of malls
+	// read amount of malls
     int lines;
     file >> lines;
 
-	// Vectors
+	// vectors
     vector<int> prices;
     vector<int> malls;
     vector<int> partial_solutions;
     vector<int> precursors;
 
-    // Read lines
+    // read lines
     for (int i = 0; i < lines; i++) {
     	
         int g, l;
