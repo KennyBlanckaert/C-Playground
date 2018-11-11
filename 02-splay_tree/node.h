@@ -31,7 +31,7 @@ class Node {
 
         /* Functions */
 
-//    private:
+        /* Fields */
         Key key;
         Tree<Key> left;
         Tree<Key> right;

@@ -57,6 +57,9 @@ class Tree : unique_ptr<Node<Key>> {
             splay(current);
         };
 
+        // Rotate right if node is left child of his parent
+        // Rotate left if node is right child of his parent
+        // Stop if node is at the root (no parent)
         void splay(Tree<Key>* last_added) {
 
             while (last_added->get()->parent != nullptr) {
@@ -78,9 +81,6 @@ class Tree : unique_ptr<Node<Key>> {
 
                 cout << "parent = " << parent->get()->key << endl;
 
-                // Rotate right is node is left child of his parent
-                // Rotate left is node is right child of his parent
-                // Stop is node is the root (no parent)
                 if (parent->get()->left && parent->get()->left.get()->key == last_added->get()->key) {
                     cout << "rotate right" << endl;
                     parent->rotate(true);
