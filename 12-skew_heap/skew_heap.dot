@@ -1,0 +1,31 @@
+digraph {
+"30"[label="30"];
+"40"[label="40"];
+"50"[label="50"];
+"90"[label="90"];
+null1 [shape=point];
+null2 [shape=point];
+"70"[label="70"];
+null3 [shape=point];
+null4 [shape=point];
+"60"[label="60"];
+"80"[label="80"];
+null5 [shape=point];
+null6 [shape=point];
+null7 [shape=point];
+null8 [shape=point];
+"30" -> "40";
+"40" -> "50";
+"50" -> "90";
+"90" -> null1;
+"90" -> null2;
+"50" -> "70";
+"70" -> null3;
+"70" -> null4;
+"40" -> "60";
+"60" -> "80";
+"80" -> null5;
+"80" -> null6;
+"60" -> null7;
+"30" -> null8;
+}
