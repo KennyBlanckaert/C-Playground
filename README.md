@@ -23,6 +23,8 @@
 
 ## 4 Strings
 
+* Knuth_Morris_Pratt implementation
+
 ## 9 Dynamic Programming
 
 * 91 max_non_crossing_matching
