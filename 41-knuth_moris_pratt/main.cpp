@@ -2,20 +2,23 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
-
-#include "knuth_morris_pratt.h"
+#include <queue>
+#include <cstring>
+#include <fstream>
 
 using namespace std;
 
+#include "knuth_morris_pratt.h"
+
 int main(int argc, char** argv) {
 
-    string input = "art";
+    string input = "abcdefdef";
     // cout << "Enter word to search: " << endl;
     // cin >> input;
 
     string filename = "shakespeare_limited.txt";
 
-    KnuthMorrisPratt kmp(filename, input.c_str(), input.length());
+    KnuthMorrisPratt kmp(filename, (uchar*) input.c_str(), input.length());
     int occurences = kmp.start();
 
     cout << "Found the word \"" << input << "\" " << occurences << " times.";

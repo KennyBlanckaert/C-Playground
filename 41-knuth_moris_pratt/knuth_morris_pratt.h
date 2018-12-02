@@ -16,24 +16,25 @@ class KnuthMorrisPratt {
 
         // Fields
         char* search_field;
-        int field_length;
-        char* needle;
-        int needle_length;
+        uint field_length;
+        uchar* needle;
+        uint needle_length;
 
         // Constructors
-        KnuthMorrisPratt(string filename, const char* needle, uint length) {
+        KnuthMorrisPratt(string filename, uchar* needle, uint length) : needle(needle), needle_length(length) {
+
+            // Parse file to string
             ifstream in(filename);
             string contents((std::istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
             
             cout << "INITIALIZING VARIABLES" << endl;
+
+            // Set length variables
             this->field_length = contents.length();
-            this->needle_length = length;
 
-            this->search_field = (char*) malloc(sizeof(char*) * this->field_length);
+            // Set uchar* variables
+            this->search_field = new char();
             strcpy(this->search_field, contents.c_str());
-
-            this->needle = (char*) malloc(sizeof(char*) * this->needle_length);
-            strcpy(this->needle, needle);
         };
 
         // Functions
@@ -50,7 +51,7 @@ class KnuthMorrisPratt {
 
             for (int i = 0; i < this->field_length; i++) {
 
-                // CHARACTERS NOT EQUAL: reset found (if not @ start)
+                // CHARACTERS NOT EQUAL: reset (if not @ start)
                 while (j > 0 && this->search_field[i] != this->needle[j]) {
                     j = found[j-1];
                 }
@@ -60,7 +61,7 @@ class KnuthMorrisPratt {
                     j++;
                 }
 
-                // VOLLEDIG WOORD GEVONDEN: aantal++ & verder zoeken
+                // FOUND COMPLETE WORD: aantal++ & continue
                 if (j == this->needle_length) {
                     aantal++;
                 }
@@ -69,19 +70,25 @@ class KnuthMorrisPratt {
             return aantal;
         };
 
-        void FailureFunction(char* pattern , int* found) {
+        // When the pattern contains a part that repeats itself
+        // You can't go back to the beginning of the pattern
+        // Thats why we go back to the first repeating part
+        /* EXAMPLE defdef 
+                   000123  => when no match at the second 'e', return to the first 'e'
+        */
+        void FailureFunction(const uchar* needle , int* found) {
            
             int i = 1;
             int j = 0;
 
             found[0] = 0;
             while (i < this->needle_length) { 
-                if (pattern[i] == pattern[j]) {
+                if (needle[i] == needle[j]) {
                     found[i] = j+1;
                     i++;
                     j++;
                 } 
-                else if (j>0) {
+                else if (j > 0) {
                     j = found[j-1];
                 } 
                 else {
@@ -89,6 +96,11 @@ class KnuthMorrisPratt {
                     i++;
                 }
             }
-}
+
+            for (int i = 0; i < this->needle_length; i++) {
+                cout << found[i];
+            }
+            cout << endl;
+        }
 };
     
