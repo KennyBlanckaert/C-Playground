@@ -3,6 +3,13 @@ typedef unsigned char uchar;
 
 #include "bitpatroon.h"
 
+/* create an S-table => each letter is converted to a pattern (1 if equal, 0 if not equal)
+ * 
+ * Algorithm
+ *      start with ...0000
+ *      shift + AND with pattern in S-tabel corresponding to the current character (not in table = AND with ...0000)
+ *      when result equals ...0001 => MATCH
+ */
 class Shiftand {
     public:
 
@@ -50,7 +57,7 @@ class Shiftand {
 
                 // Right shift (1 is added to the left)
                 R  = R.shiftRight(1);
-                R |= Bitpatroon::oneBit(this->needle_length);
+                R |= Bitpatroon::oneBit(this->needle_length);           // not exist = ...0000
 
                 // AND 
                 uint characterIndex = (uint) search_field[i];            
