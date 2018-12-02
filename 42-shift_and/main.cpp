@@ -12,7 +12,7 @@ using namespace std;
 int main(int argc, char** argv) {
 
     // Parameters
-    string word = "is";
+    string word = "where";
     string filename = "shakespeare_limited.txt";
 
     // Needle variables

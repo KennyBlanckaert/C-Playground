@@ -22,7 +22,7 @@ class Shiftand {
             for (uint i = 0; i < needle_length; i++) {
                 uint characterIndex = (uint) needle[i];
                 characterPatterns[characterIndex].setLength(needle_length);
-                characterPatterns[characterIndex] |= Bitpatroon::eenbit(needle_length - i);
+                characterPatterns[characterIndex] |= Bitpatroon::oneBit(needle_length - i);
             }
 
             printTable();
@@ -42,19 +42,19 @@ class Shiftand {
             int occurences = 0;
 
             // Start with a bitpattern having the Most Significant Bit set (#shifits = length - 1)
-            Bitpatroon solution = Bitpatroon::eenbit(0);
+            Bitpatroon solution = Bitpatroon::oneBit(0);
 
             // Start = ...0000
             Bitpatroon R(0);
             for (uint i = 0; i < search_field_length; i++) {
 
                 // Right shift (1 is added to the left)
-                R  = R.shiftrechts(1);
-                R |= Bitpatroon::eenbit(this->needle_length);
+                R  = R.shiftRight(1);
+                R |= Bitpatroon::oneBit(this->needle_length);
 
                 // AND 
                 uint characterIndex = (uint) search_field[i];            
-                R &= characterPatterns[characterIndex];                 // if not exist: ...0000
+                R &= characterPatterns[characterIndex];                
 
                 // When R equals 1 => word match
                 if (R.bits == 1) {
