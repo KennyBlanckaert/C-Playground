@@ -43,16 +43,16 @@ class KnuthMorrisPratt {
 
             int aantal = 0;
             int found[100];
-            found[0] = 0;
             int i = 0;
             int j = 0; 
 
-            // FailureFunction(P, F, m);
+            FailureFunction(this->needle, found);
+
             for (int i = 0; i < this->field_length; i++) {
 
                 // CHARACTERS NOT EQUAL: reset found (if not @ start)
                 while (j > 0 && this->search_field[i] != this->needle[j]) {
-                    j = 0;
+                    j = found[j-1];
                 }
 
                 // CHARACTERS EQUAL: check next
@@ -60,7 +60,7 @@ class KnuthMorrisPratt {
                     j++;
                 }
 
-                // VOLLEDIG WOORD GEVONDEN: aantal++ & verzoeken
+                // VOLLEDIG WOORD GEVONDEN: aantal++ & verder zoeken
                 if (j == this->needle_length) {
                     aantal++;
                 }
@@ -69,24 +69,26 @@ class KnuthMorrisPratt {
             return aantal;
         };
 
-        // void FailureFunction(char P[], int F[], int m) {
-        //     int i = 1;
-        //     int j = 0;
-        //     F[0] = 0;
-        //     while (i<m) { 
-        //         if (P[i] == P[j]) {
-        //             F[i] = j+1;
-        //             i++;
-        //             j++;
-        //         } 
-        //         else if (j>0) {
-        //             j = F[j-1];
-        //         } 
-        //         else {
-        //             F[i] = 0;
-        //             i++;
-        //         }
-        //     }
-        // };
+        void FailureFunction(char* pattern , int* found) {
+           
+            int i = 1;
+            int j = 0;
+
+            found[0] = 0;
+            while (i < this->needle_length) { 
+                if (pattern[i] == pattern[j]) {
+                    found[i] = j+1;
+                    i++;
+                    j++;
+                } 
+                else if (j>0) {
+                    j = found[j-1];
+                } 
+                else {
+                    found[i] = 0;
+                    i++;
+                }
+            }
+}
 };
     
