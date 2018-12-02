@@ -7,7 +7,7 @@ typedef unsigned char uchar;
  * 
  * Algorithm
  *      start with ...1111
- *      shift + OR with pattern in S-tabel corresponding to the current character (not in table = AND with ...1111)
+ *      shift + OR with pattern in S-tabel corresponding to the current character (not in table = OR with ...1111)
  *      when result equals ...1110 => MATCH
  */
 class Shiftor {
