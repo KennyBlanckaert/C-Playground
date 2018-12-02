@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     ifstream in(filename);
     string contents((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
 
-    // Execute SHIFT-AND
+    // Execute SHIFT-OR
     queue<const uchar*> results;
     int occurences = shiftor.search(results, (const uchar*) contents.c_str(), contents.length());
 
