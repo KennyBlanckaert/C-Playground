@@ -12,8 +12,9 @@ class Graph {
     public:
 
         // Constructor
-        Graph(int nodes = 0) {
+        Graph(int nodes = 0) : bridgesFound(false), bridges(0) {
             this->connections.resize(nodes);
+
         };
 
         // Functions
@@ -79,12 +80,12 @@ class Graph {
 
         // Graph should be connected!
         void findBridges() {
-            if (this->bridgesFound) {
+            if (!this->bridgesFound) {
                 depthFirstSearch();
             }
             else {
                 for (int i = 0; i < this->bridges.size(); i+=2) {
-                    cout << "Bridge found between node " << this->bridges[i] << " and node " << this->bridges[i+1]  << endl;
+                    cout << "\tBridge found between node " << this->bridges[i] << " and node " << this->bridges[i+1]  << endl;
                 }
             }
         }
@@ -130,12 +131,12 @@ class Graph {
             vector<int> low_values(nodes);
             vector<int> discovery_values(nodes);
             
-            visit(startNode, visited, counter);
+            visit(startNode, -1, visited, low_values, discovery_values, counter);
 
             return visited;
         };
 
-        void visit(int node, vector<int>& visited, vector<int>& lows, vector<int>& discs, int& counter) {
+        void visit(int node, int parent, vector<int>& visited, vector<int>& lows, vector<int>& discs, int& counter) {
             set<int> neighbors = this->connections[node];
             
             visited[node] = counter;
@@ -145,13 +146,14 @@ class Graph {
             counter++;
 
             for (auto iter = neighbors.begin(); iter != neighbors.end(); iter++) {
+                if (*iter == parent) continue;
                 if (visited[*iter] < 0) {
-                    visit(*iter, visited, counter);
+                    visit(*iter, node, visited, lows, discs, counter);
                     lows[node] = min(lows[node], lows[*iter]);
 
                     // bridge found
                     if (discs[node] < lows[*iter]) {
-                        cout << "Bridge found between node " << node << " and node " << *iter << endl;
+                        cout << "\tBridge found between node " << node << " and node " << *iter << endl;
                         this->bridgesFound = true;
                         this->bridges.push_back(node);
                         this->bridges.push_back(*iter);

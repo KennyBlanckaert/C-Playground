@@ -9,21 +9,21 @@ using namespace std;
 int main(int argc, char** argv) {
 
     // 4 bridges
-    Graph<Direction::DIRECTED> t_graph(5);
+    Graph<Direction::UNDIRECTED> t_graph(5);
     t_graph.addConnection(0, 1);
     t_graph.addConnection(0, 3);
     t_graph.addConnection(0, 2);
     t_graph.addConnection(2, 4);
 
     // No bridges
-    Graph<Direction::DIRECTED> cycle(4);
+    Graph<Direction::UNDIRECTED> cycle(4);
     cycle.addConnection(0, 1);
     cycle.addConnection(1, 2);
     cycle.addConnection(2, 3);
     cycle.addConnection(3, 0);
 
     // 2 bridges
-    Graph<Direction::DIRECTED> graph(4);
+    Graph<Direction::UNDIRECTED> graph(6);
     graph.addConnection(0, 1);
     graph.addConnection(1, 2);
     graph.addConnection(1, 5);
@@ -31,13 +31,19 @@ int main(int argc, char** argv) {
     graph.addConnection(2, 3);
     graph.addConnection(3, 4);
 
-    // t_graph.findBridges();
-    // cycle.findBridges();
-    // graph.findBridges();
+    cout << "graph1: \n" << endl;
+    t_graph.findBridges();
+    cout << endl;
+    cout << "graph2: \n" << endl;
+    cycle.findBridges();
+    cout << endl;
+    cout << "graph3: \n" << endl;
+    graph.findBridges();
+    cout << endl;
 
     t_graph.draw("graph1.dot");
     cycle.draw("graph2.dot");
-    // graph.draw("graph3.dot");
+    graph.draw("graph3.dot");
 
     return 0;
 }
