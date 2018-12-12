@@ -26,9 +26,9 @@ class Graph {
             this->connections.resize(number_of_nodes + 1);
         };          
 
-        int addConnection(int from, int to) {
+        void addConnection(int from, int to) {
             if (!isValidNode(from) || !isValidNode(to)) {
-                throw "Unvalid nodes!";
+                cout << "Unvalid nodes! \n";
             }
 
             if (direction == Direction::DIRECTED) {
