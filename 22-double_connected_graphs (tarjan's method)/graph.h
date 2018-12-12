@@ -12,7 +12,7 @@ class Graph {
     public:
 
         // Constructor
-        Graph(int nodes = 0) : bridgesFound(false), bridges(0) {
+        Graph(int nodes = 0) : found(false), bridges(0) {
             this->connections.resize(nodes);
 
         };
@@ -26,7 +26,7 @@ class Graph {
             int number_of_nodes = connections.size();
             this->connections.resize(number_of_nodes + 1);
 
-            this->bridgesFound = false;
+            this->found = false;
             this->bridges.clear();
             this->bridges.shrink_to_fit();
         };          
@@ -45,7 +45,7 @@ class Graph {
                 this->connections[to].insert(from);
             }
 
-            this->bridgesFound = false;
+            this->found = false;
             this->bridges.clear();
             this->bridges.shrink_to_fit();
         }; 
@@ -79,14 +79,19 @@ class Graph {
         };
 
         // Graph should be connected!
-        void findBridges() {
-            if (!this->bridgesFound) {
+        void isDoubleConnected() {
+            if (!this->found) {
                 depthFirstSearch();
             }
             else {
                 for (int i = 0; i < this->bridges.size(); i+=2) {
                     cout << "\tBridge found between node " << this->bridges[i] << " and node " << this->bridges[i+1]  << endl;
                 }
+            }
+
+            cout << endl;
+            for (auto iter = this->articulation_points.begin(); iter != this->articulation_points.end(); iter++) {
+                cout << "\tArticulation point found: node " << *iter  << endl;
             }
         }
 
@@ -127,40 +132,52 @@ class Graph {
             int nodes = countNodes();
             vector<int> visited(nodes, -1);
 
-            // For bridge searching
+            // for bridge/articulation point searching (Tarjan's algorithm)
             vector<int> low_values(nodes);
             vector<int> discovery_values(nodes);
             
-            visit(startNode, -1, visited, low_values, discovery_values, counter);
+            // add for-loop if start graph is not connected
+            visit(startNode, -1, visited, low_values, counter);
 
             return visited;
         };
 
-        void visit(int node, int parent, vector<int>& visited, vector<int>& lows, vector<int>& discs, int& counter) {
+        void visit(int node, int parent, vector<int>& visited, vector<int>& lows, int& counter) {
             set<int> neighbors = this->connections[node];
             
             visited[node] = counter;
             lows[node] = counter;
-            discs[node] = counter;
 
             counter++;
 
             for (auto iter = neighbors.begin(); iter != neighbors.end(); iter++) {
                 if (*iter == parent) continue;
+
+                // first visit
                 if (visited[*iter] < 0) {
-                    visit(*iter, node, visited, lows, discs, counter);
+                    visit(*iter, node, visited, lows, counter);
                     lows[node] = min(lows[node], lows[*iter]);
 
                     // bridge found
-                    if (discs[node] < lows[*iter]) {
+                    if (visited[node] < lows[*iter]) {
                         cout << "\tBridge found between node " << node << " and node " << *iter << endl;
-                        this->bridgesFound = true;
+                        this->found = true;
                         this->bridges.push_back(node);
                         this->bridges.push_back(*iter);
+
+                        // check for articulation point
+                        // because we found a bridge, at least one of the nodes is an articulation point
+                        if (this->connections[node].size() > 1) {
+                            this->articulation_points.insert(node);
+                        }
+                        if (this->connections[*iter].size() > 1) {
+                            this->articulation_points.insert(*iter);
+                        }
                     }
                 }
+                // already visited
                 else {
-                    lows[node] = min(lows[node], discs[*iter]);
+                    lows[node] = min(lows[node], visited[*iter]);
                 }
             }
         };
@@ -168,6 +185,7 @@ class Graph {
         // Fields
         vector<set<int>> connections;
 
-        bool bridgesFound;
+        bool found;
         vector<int> bridges;
+        set<int> articulation_points;
 };
