@@ -8,10 +8,6 @@
 * 04 kd_tree
 * 05 point_quadtree
 
-> https://algoritmen.ahlun.be/Algoritmen *(Website)*  
-> https://github.com/ahluntang/tiwi-algoritmen/tree/doc-1.0.0 *(Github Algorithm Repository)*  
-> https://www.cs.usfca.edu/~galles/visualization/Algorithms.html *(Online program)*  
-
 ## 1 Heaps
 
 * 11 leftish_heap
@@ -34,3 +30,7 @@
 ## 9 Dynamic Programming
 
 * 91 max_non_crossing_matching
+
+> https://algoritmen.ahlun.be/Algoritmen *(Website)*  
+> https://github.com/ahluntang/tiwi-algoritmen/tree/doc-1.0.0 *(Github Algorithm Repository)*  
+> https://www.cs.usfca.edu/~galles/visualization/Algorithms.html *(Online program)*  
