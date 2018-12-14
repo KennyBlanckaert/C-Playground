@@ -7,6 +7,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
+    // Initialization
     vector<string> men = { "Dries", "Kevin", "Steven", "Thibaut", "Vincent", "Eden", "Toby", "Axel", "Marouane" };
     vector<string> women = { "Annelien", "Ellen", "Julie", "Tatiane", "Virginie", "Laura", "Cilou", "Laurence", "Zeynep" };
     vector<vector<int>> men_preferences = {
@@ -32,11 +33,29 @@ int main(int argc, char** argv) {
         { 9, 4, 8, 5, 7, 6, 3, 2, 1 }
     };
 
+    // Start algorithm
     Stable_Matching matching(9);
     matching.setMen(men);
     matching.setWomen(women);
     matching.setMenPreferences(men_preferences);
     matching.setWomenPreferences(women_preferences);
 
-    matching.findStableMarriage();
+    // Print matches
+    map<string, string> result;
+    
+    // Men
+    result = matching.findStableMarriage(true);
+    cout << endl;
+    cout << "Men take initiative: " << endl;
+    for (auto iter = result.begin(); iter != result.end(); iter++) {
+        cout << "\t" << iter->first << " <-> " << iter->second << endl;
+    }
+
+    // Women
+    result = matching.findStableMarriage(false);
+    cout << endl;
+    cout << "Women take initiative: " << endl;
+    for (auto iter = result.begin(); iter != result.end(); iter++) {
+        cout << "\t" << iter->first << " <-> " << iter->second << endl;
+    }
 }

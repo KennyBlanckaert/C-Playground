@@ -22,7 +22,7 @@ class Stable_Matching {
         void setWomenPreferences(vector<vector<int>>& women_preferences) { this->women_preferences = women_preferences; }
 
         // Functions
-        map<string, string> findStableMarriage() {
+        map<string, string> findStableMarriage(bool initiative_from_men = true) {
 
             // initialize map for result
             map<string, string> matchings;
@@ -39,19 +39,34 @@ class Stable_Matching {
             } 
 
             // start gale-shapley algorithm
-            int matches = this->men.size();
-            while (find(this->matched_men.begin(), this->matched_men.end(), false) != this->matched_men.end()) {
-                for (int i = 0; i < matches; i++) {
-                    if (!this->matched_men[i]) {
-                        findMatchForMen(i);
+            if (initiative_from_men) {
+                int matches = this->men.size();
+                while (find(this->matched_men.begin(), this->matched_men.end(), false) != this->matched_men.end()) {
+                    for (int i = 0; i < matches; i++) {
+                        if (!this->matched_men[i]) {
+                            findMatchForMen(i);
+                        }
                     }
-                }
-            } 
+                } 
 
-            // combine results in map
-            cout << "All men matched!" << endl;
-            
-            /* TODO */
+                // combine results in map
+                // cout << "All men matched!" << endl;
+                combineMenResults(matchings);
+            }
+            else {
+                int matches = this->women.size();
+                while (find(this->matched_women.begin(), this->matched_women.end(), false) != this->matched_women.end()) {
+                    for (int i = 0; i < matches; i++) {
+                        if (!this->matched_women[i]) {
+                            findMatchForWomen(i);
+                        }
+                    }
+                } 
+
+                // combine results in map
+                // cout << "All women matched!" << endl;
+                combineWomenResults(matchings);
+            }
 
             return matchings;
         }
@@ -67,40 +82,97 @@ class Stable_Matching {
                 // find the position of the women
                 this->last_match[index]++;
                 vector<int>::iterator iter = find(this->men_preferences[index].begin(), this->men_preferences[index].end(), this->last_match[index]);
-                int women_pos = iter - this->men_preferences[index].begin();
+                int woman_pos = iter - this->men_preferences[index].begin();
 
-                if (this->matched_women[women_pos]) {
+                if (this->matched_women[woman_pos]) {
 
                     // always check if women doesn't prefer the man over the current one
-                    cout << this->men[index] << "! " << this->women[women_pos] << " is already married" << endl;
-                    int current_rank = this->women_preferences[women_pos][this->current_women_matches[women_pos]];
-                    int new_rank = this->women_preferences[women_pos][index];
+                    // cout << this->men[index] << "! " << this->women[woman_pos] << " is already married" << endl;
+                    int current_rank = this->women_preferences[woman_pos][this->current_women_matches[woman_pos]];
+                    int new_rank = this->women_preferences[woman_pos][index];
 
                     if (new_rank < current_rank) {
-                        vector<int>::iterator iter = find(this->women_preferences[women_pos].begin(), this->women_preferences[women_pos].end(), current_rank);
-                        int man_pos = iter - this->women_preferences[women_pos].begin();
+                        vector<int>::iterator iter = find(this->women_preferences[woman_pos].begin(), this->women_preferences[woman_pos].end(), current_rank);
+                        int man_pos = iter - this->women_preferences[woman_pos].begin();
 
-                        cout << this->women[women_pos] << " breaks with " << this->men[man_pos] << endl;
-                        cout << this->men[index] << " marries with " << this->women[women_pos] << endl;
+                        // cout << this->women[woman_pos] << " breaks with " << this->men[man_pos] << endl;
+                        // cout << this->men[index] << " marries with " << this->women[woman_pos] << endl;
                         this->matched_men[index] = true;
-                        this->current_men_matches[index] = women_pos;
+                        this->current_men_matches[index] = woman_pos;
                         this->matched_men[man_pos] = false;
                         this->current_men_matches[man_pos] = -1;
 
-                        this->current_women_matches[women_pos] = index;
+                        this->current_women_matches[woman_pos] = index;
                     }
                     else {
-                        cout << this->women[women_pos] << "stays with her current man" << endl;
+                        // cout << this->women[woman_pos] << "stays with her current man" << endl;
                     }
 
                 }
                 else {
-                    cout << this->men[index] << " marries with " << this->women[women_pos] << endl;
+                    // cout << this->men[index] << " marries with " << this->women[woman_pos] << endl;
                     this->matched_men[index] = true;
-                    this->matched_women[women_pos] = true;
-                    this->current_men_matches[index] = women_pos;
-                    this->current_women_matches[women_pos] = index;
+                    this->matched_women[woman_pos] = true;
+                    this->current_men_matches[index] = woman_pos;
+                    this->current_women_matches[woman_pos] = index;
                 }
+            }
+        }
+
+        void findMatchForWomen(int index) {
+
+            // take next women until not matched
+            while (!this->matched_women[index]) {
+
+                // find the position of the women
+                this->last_match[index]++;
+                vector<int>::iterator iter = find(this->women_preferences[index].begin(), this->women_preferences[index].end(), this->last_match[index]);
+                int man_pos = iter - this->women_preferences[index].begin();
+
+                if (this->matched_men[man_pos]) {
+
+                    // always check if women doesn't prefer the man over the current one
+                    // cout << this->women[index] << "! " << this->men[man_pos] << " is already married" << endl;
+                    int current_rank = this->men_preferences[man_pos][this->current_men_matches[man_pos]];
+                    int new_rank = this->men_preferences[man_pos][index];
+
+                    if (new_rank < current_rank) {
+                        vector<int>::iterator iter = find(this->men_preferences[man_pos].begin(), this->men_preferences[man_pos].end(), current_rank);
+                        int woman_pos = iter - this->men_preferences[man_pos].begin();
+
+                        // cout << this->men[man_pos] << " breaks with " << this->women[woman_pos] << endl;
+                        // cout << this->women[index] << " marries with " << this->men[man_pos] << endl;
+                        this->matched_women[index] = true;
+                        this->current_women_matches[index] = man_pos;
+                        this->matched_women[woman_pos] = false;
+                        this->current_women_matches[woman_pos] = -1;
+
+                        this->current_men_matches[man_pos] = index;
+                    }
+                    else {
+                        // cout << this->men[man_pos] << "stays with her current woman" << endl;
+                    }
+
+                }
+                else {
+                    // cout << this->women[index] << " marries with " << this->men[man_pos] << endl;
+                    this->matched_women[index] = true;
+                    this->matched_men[man_pos] = true;
+                    this->current_women_matches[index] = man_pos;
+                    this->current_men_matches[man_pos] = index;
+                }
+            }
+        }
+
+        void combineMenResults(map<string, string>& matchings) {
+            for (int i = 0; i < this->current_men_matches.size(); i++) {
+                matchings.insert(pair<string, string>(this->men[i], this->women[this->current_men_matches[i]]));
+            }
+        }
+
+        void combineWomenResults(map<string, string>& matchings) {
+            for (int i = 0; i < this->current_women_matches.size(); i++) {
+                matchings.insert(pair<string, string>(this->women[i], this->men[this->current_women_matches[i]]));
             }
         }
 
