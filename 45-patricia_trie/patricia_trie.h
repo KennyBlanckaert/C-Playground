@@ -1,12 +1,12 @@
 #include "node.h"
 
-class Patricia_Patricia_Tree : unique_ptr<Node> {
+class Patricia_Tree : unique_ptr<Node> {
    public:
         using unique_ptr<Node>::unique_ptr;
 
         /* Constructor & Destructor  */
-        Patricia_Tree() { (*this) = make_unique<Node>(' '); };
-        Patricia_Tree(unique_ptr<Node>&& Patricia_Tree) : unique_ptr<Node>(move(Patricia_Tree)) { };
+        Patricia_Tree() { (*this) = make_unique<Node>(" "); };
+        Patricia_Tree(unique_ptr<Node>&& patricia_tree) : unique_ptr<Node>(move(patricia_tree)) { };
         Patricia_Tree(const vector<string>& keys) {
 			for (int i = 0; i < keys.size(); i++) {
 				this->add(keys[i]);
@@ -23,7 +23,8 @@ class Patricia_Patricia_Tree : unique_ptr<Node> {
         Patricia_Tree& operator=(Patricia_Tree &&other) = default;
 
         /* Functions */
-        void add(const string& word);
+        void add(string word);
+        void generateID(unique_ptr<Node>& node);
         void draw(const char* filename);
 };
 

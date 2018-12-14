@@ -8,8 +8,8 @@ class Node {
         vector<unique_ptr<Node>> children;
 
         /* Constructors & Destructor */
-        Node() : character(' '), id("root"), terminator(false) { };
-        Node(char character) : character(character), children(0), terminator(false), id("root") { };
+        Node() : text(" "), children(0), terminator(false), id("root") { };
+        Node(string text) : text(text), children(0), terminator(false), id("root") { };
         ~Node() = default;
 
         /* Copy constructor & operator */

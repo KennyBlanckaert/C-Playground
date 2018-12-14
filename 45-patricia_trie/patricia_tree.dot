@@ -1,0 +1,17 @@
+digraph {
+"root"[label=" "];
+"0x1006680"[label="c"];
+"0x10068d0"[label="a"];
+"0x1006760"[label="r" fillcolor=black style=filled fontcolor=white];
+"0x1006860"[label="rot" fillcolor=black style=filled fontcolor=white];
+"0x10067d0"[label="t" fillcolor=black style=filled fontcolor=white];
+"0x1006940"[label="ow" fillcolor=black style=filled fontcolor=white];
+"0x10066f0"[label="apple" fillcolor=black style=filled fontcolor=white];
+"root" -> "0x1006680";
+"0x1006680" -> "0x10068d0";
+"0x10068d0" -> "0x1006760";
+"0x1006760" -> "0x1006860";
+"0x10068d0" -> "0x10067d0";
+"0x1006680" -> "0x1006940";
+"root" -> "0x10066f0";
+}

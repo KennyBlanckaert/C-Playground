@@ -5,10 +5,10 @@ string Node::draw_recursive(ostream& out, int& counter, string parent) {
 
     // create point
     if (this->terminator) {
-        out << "\"" << this->id << "\"[label=\"" << this->character << "\" fillcolor=black style=filled fontcolor=white];\n";
+        out << "\"" << this->id << "\"[label=\"" << this->text << "\" fillcolor=black style=filled fontcolor=white];\n";
     }
     else {
-        out << "\"" << this->id << "\"[label=\"" << this->character << "\"];\n";
+        out << "\"" << this->id << "\"[label=\"" << this->text << "\"];\n";
     }
 
     // create connection with parent

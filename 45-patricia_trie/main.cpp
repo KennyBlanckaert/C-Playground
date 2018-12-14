@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#include "patricia_patricia_tree.h"
+#include "patricia_trie.h"
 
 int main(int argc, char** argv) {
     
