@@ -131,7 +131,7 @@ class Stable_Matching {
 
                 if (this->matched_men[man_pos]) {
 
-                    // always check if women doesn't prefer the man over the current one
+                    // always check if men doesn't prefer the woman over the current one
                     // cout << this->women[index] << "! " << this->men[man_pos] << " is already married" << endl;
                     int current_rank = this->men_preferences[man_pos][this->current_men_matches[man_pos]];
                     int new_rank = this->men_preferences[man_pos][index];
@@ -187,7 +187,6 @@ class Stable_Matching {
 
         vector<bool> matched_men;
         vector<bool> matched_women;
-
         vector<int> current_men_matches;
         vector<int> current_women_matches;
 };
