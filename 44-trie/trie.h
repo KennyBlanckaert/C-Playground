@@ -5,7 +5,7 @@ class Trie : unique_ptr<Node> {
         using unique_ptr<Node>::unique_ptr;
 
         /* Constructor & Destructor  */
-        Trie() { (*this) = make_unique<Node>('*'); };
+        Trie() { (*this) = make_unique<Node>(' '); };
         Trie(unique_ptr<Node>&& trie) : unique_ptr<Node>(move(trie)) { };
         Trie(const vector<string>& keys) {
 			for (int i = 0; i < keys.size(); i++) {
