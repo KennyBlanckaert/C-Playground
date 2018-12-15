@@ -1,18 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string>
-#include <iostream>
-#include <queue>
-#include <cstring>
-#include <fstream>
-
-using namespace std;
 
 #include "boyer_moore.h"
 
 int main(int argc, char** argv) {
 
-    string input = "test";
+    string input = "defdef";
     // cout << "Enter word to search: " << endl;
     // cin >> input;
 

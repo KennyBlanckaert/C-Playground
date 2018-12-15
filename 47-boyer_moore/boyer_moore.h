@@ -1,9 +1,9 @@
-#include <queue>
-#include <cstring>
 #include <string>
-#include <cstring>
+#include <algorithm>
+#include <map>
 #include <fstream>
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -15,43 +15,87 @@ class Boyer_Moore {
     public:
 
         // Fields
-        char* search_field;
-        uint field_length;
-        uchar* needle;
-        uint needle_length;
+        char* text;
+        uint text_length;
+        uchar* pattern;
+        uint pattern_length;
 
         // Constructors
-        BoyerMoore(string filename, uchar* needle, uint length) : needle(needle), needle_length(length) {
+        Boyer_Moore(string filename, uchar* pattern, uint length) : pattern(pattern), pattern_length(length) {
 
             // Parse file to string
             ifstream in(filename);
             string contents((std::istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
-            
-            cout << "INITIALIZING VARIABLES" << endl;
 
             // Set length variable
-            this->field_length = contents.length();
+            this->text_length = contents.length();
 
             // Set uchar* variable
-            this->search_field = new char();
-            strcpy(this->search_field, contents.c_str());
+            this->text = new char();
+            strcpy(this->text, contents.c_str());
         };
 
         // Functions
-        int start() {       
+        int start() {      
 
-            cout << "Boyer Moore START" << endl;
+            // intialize bad-character table
+            map<char, int> table;
+            buildBadCharacterTable(this->pattern, this->pattern_length, table);
+
+            // start algorithm (boyer-moore start at the end of the pattern)
+            int matches = 0;
+            int field_index = this->pattern_length - 1;
+            int pattern_index = this->pattern_length - 1;
+            while (field_index < this->text_length) {
+                // equal: decrement both indexes
+                if (this->pattern[pattern_index] == this->text[field_index]) {
+                    field_index--;
+                    pattern_index--;
+                }
+                // not equal: find character in bad-character table and shift with that value (if not found, the pattern length)
+                else {
+                    char current_character = this->text[field_index];
+                    if (table.find(current_character) != table.end()) {
+                        field_index += table[current_character];
+                    }
+                    else {
+                        field_index += this->pattern_length;
+                    }
+                }
+
+                if (pattern_index == 0) {
+                    matches++;
+
+                    pattern_index = this->pattern_length - 1;
+                    field_index += this->pattern_length;
+                }
+            }
+
+            // do last check
+            while (pattern_index != 0 && this->pattern[pattern_index] == this->text[field_index]) {
+                field_index--;
+                pattern_index--;
+            }
+            if (pattern_index == 0) { matches++; }
+
+            // done
+            return matches;
 
         };
 
-        // When the pattern contains a part that repeats itself
-        // You can't go back to the beginning of the pattern
-        // Thats why we go back to the first repeating part
-        /* EXAMPLE defdef 
-         *          000123  => when no match at the second 'e', return to the first 'e'
-         */
-        void buildBadCharacterTable(const uchar* needle, map<char, int>& table) {
-           
-        }
+        void buildBadCharacterTable(const uchar* pattern, uint pattern_length, map<char, int>& table) {
+            for (int index = 0; index < pattern_length; index++) {
+                char character = pattern[index];
+                int shift = max(1, (int)pattern_length - index - 1);
+                
+                auto iter = table.find(character);
+                if (iter != table.end()) {
+                    table[character] = shift;
+                }
+                else {
+                    table.insert(pair<char, int>(character, shift));
+                }
+            }
+        };
 };
     
