@@ -47,7 +47,7 @@ class KnuthMorrisPratt {
             int i = 0;
             int j = 0; 
 
-            FailureFunction(this->needle, found);
+            prefixFunction(this->needle, found);
 
             for (int i = 0; i < this->field_length; i++) {
 
@@ -74,9 +74,9 @@ class KnuthMorrisPratt {
         // You can't go back to the beginning of the pattern
         // Thats why we go back to the first repeating part
         /* EXAMPLE defdef 
-                   000123  => when no match at the second 'e', return to the first 'e'
-        */
-        void FailureFunction(const uchar* needle , int* found) {
+         *          000123  => when no match at the second 'e', return to the first 'e'
+         */
+        void prefixFunction(const uchar* needle , int* found) {
            
             int i = 1;
             int j = 0;

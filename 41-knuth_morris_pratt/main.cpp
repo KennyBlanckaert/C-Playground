@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    string input = "abcdefdef";
+    string input = "abc";
     // cout << "Enter word to search: " << endl;
     // cin >> input;
 
