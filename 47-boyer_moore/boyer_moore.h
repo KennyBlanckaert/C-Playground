@@ -10,6 +10,14 @@ using namespace std;
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
+/* Boyer Moore has 3 different methods
+ * 
+ * 1. using a two-dimensional table with all positions of a single character (original)
+ * 2. the smallest location of a single character (Horspool)
+ * 3. immediately calculate the smallest shift (Sunday)
+ * 
+ * This is a Sunday implementation
+ */
 class Boyer_Moore {
 
     public:
@@ -90,7 +98,9 @@ class Boyer_Moore {
                 
                 auto iter = table.find(character);
                 if (iter != table.end()) {
-                    table[character] = min(table[character], shift);
+                    // get the minimum shift. because we loop from left to right: shift becomes automatically smaller and overwriting is valid
+                    /* table[character] = min(table[character], shift); */
+                    table[character] = shift;
                 }
                 else {
                     table.insert(pair<char, int>(character, shift));
