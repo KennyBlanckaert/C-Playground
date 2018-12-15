@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     // cout << "Enter word to search: " << endl;
     // cin >> input;
 
-    string filename = "shakespeare_limited.txt";
+    string filename = "file.txt";
 
     KnuthMorrisPratt kmp(filename, (uchar*) input.c_str(), input.length());
     int occurences = kmp.start();
