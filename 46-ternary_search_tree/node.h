@@ -1,3 +1,5 @@
+class Ternary_Search_Tree;
+
 class Node {
    public:
 
@@ -5,12 +7,12 @@ class Node {
         string id;
         char character;
 		bool terminator;
-        unique_ptr<Node> left;
-        unique_ptr<Node> middle;
-        unique_ptr<Node> right;
+        Ternary_Search_Tree left;
+        Ternary_Search_Tree middle;
+        Ternary_Search_Tree right;
 
         /* Constructors & Destructor */
-        Node() : character(' '), terminator(false), id("root") { };
+        Node() : character(' ') { };
         Node(char character) : character(character), terminator(false), id("root") { };
         ~Node() = default;
 

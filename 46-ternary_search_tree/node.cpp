@@ -21,13 +21,25 @@ string Node::draw_recursive(ostream& out, int& counter, string parent) {
         string result = this->left.get()->draw_recursive(out, counter, this->id);
         connections << result;
     }
+    else {
+        out << "null" << ++counter << " [shape=point];\n";
+        connections << '"' << this->id << "\" -> \"" << "null" << counter << '"' << endl;
+    }
     if (this->middle.get() != nullptr) {
         string result = this->middle.get()->draw_recursive(out, counter, this->id);
         connections << result;
     }
+    else {
+        out << "null" << ++counter << " [shape=point];\n";
+        connections << '"' << this->id << "\" -> \"" << "null" << counter << '"' << endl;
+    }
     if (this->right.get() != nullptr) {
         string result = this->right.get()->draw_recursive(out, counter, this->id);
         connections << result;
+    }
+    else {
+        out << "null" << ++counter << " [shape=point];\n";
+        connections << '"' << this->id << "\" -> \"" << "null" << counter << '"' << endl;
     }
 
     return connections.str();
