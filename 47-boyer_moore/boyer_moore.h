@@ -90,7 +90,7 @@ class Boyer_Moore {
                 
                 auto iter = table.find(character);
                 if (iter != table.end()) {
-                    table[character] = shift;
+                    table[character] = min(table[character], shift);
                 }
                 else {
                     table.insert(pair<char, int>(character, shift));
