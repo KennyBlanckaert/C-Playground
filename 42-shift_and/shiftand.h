@@ -48,9 +48,6 @@ class Shiftand {
         int search(std::queue<const uchar*>& position, const uchar* search_field, uint search_field_length) {           
             int occurences = 0;
 
-            // Start with a bitpattern having the Most Significant Bit set (#shifits = length - 1)
-            Bitpatroon solution = Bitpatroon::oneBit(0);
-
             // Start = ...0000
             Bitpatroon R(0);
             for (uint i = 0; i < search_field_length; i++) {
