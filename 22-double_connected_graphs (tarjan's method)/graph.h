@@ -89,7 +89,6 @@ class Graph {
                 }
             }
 
-            cout << endl;
             for (auto iter = this->articulation_points.begin(); iter != this->articulation_points.end(); iter++) {
                 cout << "\tArticulation point found: node " << *iter  << endl;
             }
@@ -113,7 +112,7 @@ class Graph {
                 }
             }
 
-             out << "}";
+            out << "}";
         };
 
     private:
@@ -130,11 +129,10 @@ class Graph {
         vector<int> depthFirstSearch(int startNode = 0) {
             int counter = 0;
             int nodes = countNodes();
-            vector<int> visited(nodes, -1);
 
             // for bridge/articulation point searching (Tarjan's algorithm)
-            vector<int> low_values(nodes);
-            vector<int> discovery_values(nodes);
+            vector<int> visited(nodes, -1);
+            vector<int> low_values(nodes);    
             
             // add for-loop if start graph is not connected
             visit(startNode, -1, visited, low_values, counter);
@@ -156,7 +154,12 @@ class Graph {
                 // first visit
                 if (visited[*iter] < 0) {
                     visit(*iter, node, visited, lows, counter);
+
+                    // update lows
                     lows[node] = min(lows[node], lows[*iter]);
+
+                    // bridge is found when parents discovery number is smaller than his childs low number
+                    // articulation point is found when parents discovery number is equal or smaller than his childs low number (FAILS FOR ROOT)
 
                     // bridge found
                     if (visited[node] < lows[*iter]) {
@@ -166,7 +169,7 @@ class Graph {
                         this->bridges.push_back(*iter);
 
                         // check for articulation point
-                        // because we found a bridge, at least one of the nodes is an articulation point
+                        // because we found a bridge, one of the nodes could be an articulation point
                         if (this->connections[node].size() > 1) {
                             this->articulation_points.insert(node);
                         }
@@ -174,9 +177,17 @@ class Graph {
                             this->articulation_points.insert(*iter);
                         }
                     }
+
+                    // articulation point found
+                    // too solve the root issue, check for articulation points when a bridge is found
+                    if (visited[node] <= lows[*iter] && node != 0) {
+                        this->articulation_points.insert(node);
+                    }
                 }
                 // already visited
                 else {
+
+                    // update lows
                     lows[node] = min(lows[node], visited[*iter]);
                 }
             }
