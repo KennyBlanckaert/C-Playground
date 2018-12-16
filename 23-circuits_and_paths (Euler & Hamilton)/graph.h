@@ -202,33 +202,6 @@ class Graph {
 
             return false;
         };
-
-        vector<int> depthFirstSearch(int startNode = 0) {
-            int counter = 0;
-            int nodes = countNodes();
-            vector<int> visited(nodes, -1);
-            
-            // add for-loop if start graph is not connected
-            visit(startNode, -1, visited, counter);
-
-            return visited;
-        };
-
-        void visit(int node, int parent, vector<int>& visited, int& counter) {
-            set<int> neighbors = this->connections[node];
-            
-            visited[node] = counter;
-            counter++;
-
-            for (auto iter = neighbors.begin(); iter != neighbors.end(); iter++) {
-                if (*iter == parent) continue;
-
-                // first visit
-                if (visited[*iter] < 0) {
-                    visit(*iter, node, visited, counter);
-                }
-            }
-        };
         
         // Fields
         vector<set<int>> connections;
