@@ -13,11 +13,11 @@ using namespace std;
 
 int main(int argc, char** argv) {
     
-    Patricia_Tree patricia_tree;
+    Suffix_Tree suffix_tree;
 
-    patricia_tree.add("banana");
+    suffix_tree.add("banana");
 
-    patricia_tree.draw("suffix_tree.dot");
+    suffix_tree.draw("suffix_tree.dot");
     
     return 0;
-}
+};

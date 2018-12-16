@@ -1,0 +1,21 @@
+digraph {
+"root"[label=" "];
+"0xe96680"[label="banana" fillcolor=black style=filled fontcolor=white];
+"0xe966f0"[label="a"];
+"0xe969e0"[label="na"];
+"0xe96800"[label="na" fillcolor=black style=filled fontcolor=white];
+"0xe96870"[label="" fillcolor=black style=filled fontcolor=white];
+"0xe96a50"[label="" fillcolor=black style=filled fontcolor=white];
+"0xe96760"[label="na"];
+"0xe968e0"[label="na" fillcolor=black style=filled fontcolor=white];
+"0xe96950"[label="" fillcolor=black style=filled fontcolor=white];
+"root" -> "0xe96680";
+"root" -> "0xe966f0";
+"0xe966f0" -> "0xe969e0";
+"0xe969e0" -> "0xe96800";
+"0xe969e0" -> "0xe96870";
+"0xe966f0" -> "0xe96a50";
+"root" -> "0xe96760";
+"0xe96760" -> "0xe968e0";
+"0xe96760" -> "0xe96950";
+}
