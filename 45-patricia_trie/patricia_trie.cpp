@@ -1,9 +1,8 @@
 void Patricia_Tree::add(string word) {    
     Node* current = this->get();
 
-    // Check if node contains word starting with the same letter
+    // check if node contains word starting with (at least) the same letter
     bool done = false;
-    int word_length_left = word.length();
     do {
         done = false;
         int failures = 0;
@@ -11,43 +10,50 @@ void Patricia_Tree::add(string word) {
             Node* node = current->children[i].get();
             string child_word = node->text;
 
+            // count matching characters with the current_node text
             int index = 0;
-            int equal_characters = 0;
-            while (word[index] == child_word[index] && equal_characters < child_word.length()) {
-                equal_characters++;
+            while (word[index] == child_word[index] && index < child_word.length()) {
                 index++;
             }
 
-            cout << "equal character: " << equal_characters << endl;
-
-            // match: pop equal letters from word & go to the next node
-            word_length_left -= equal_characters;
-            if (equal_characters == child_word.length()) {
-                cout << "equal: going deeper" << endl;
-                word = word.substr(equal_characters);
+            // match: pop equal letters from the word & go to the next node
+            if (index == child_word.length()) {
+                word = word.substr(index);
                 current = node;
                 break;
             }
             // match: pop equal letters & split into children (stop while-loop)
-            else if (equal_characters > 0) {
-                cout << "partly equal: splitting" << endl;
-                done = true;
-                word_length_left = 0;
+            else if (index > 0) {
 
-                node->text = word.substr(0, equal_characters);
-                unique_ptr<Node> first_child = make_unique<Node>(child_word.substr(equal_characters));
-                unique_ptr<Node> second_child = make_unique<Node>(word.substr(equal_characters));
+                // decrease the word inside the current node
+                // create two new children containing the differences in both words
+                node->text = word.substr(0, index);
+                unique_ptr<Node> first_child = make_unique<Node>(child_word.substr(index));
+                unique_ptr<Node> second_child = make_unique<Node>(word.substr(index));
+                
+                // for drawing only
                 generateID(first_child);
                 generateID(second_child);
 
+                // first child inherits children from the parent
                 first_child.get()->children.swap(node->children);
+
+                // for drawing only
                 first_child.get()->setTerminator(node->terminator);
                 second_child.get()->setTerminator(true);
+
+                // parent receives the new children
                 node->children.clear();
                 node->children.shrink_to_fit();
                 node->children.push_back(move(first_child));
                 node->children.push_back(move(second_child));   
+
+                // for drawing only
                 node->setTerminator(false);  
+
+                // word is added completly added (break out of for-loop and stop while-loop)
+                word = "";
+                done = true;
 
                 break;         
             }
@@ -59,11 +65,8 @@ void Patricia_Tree::add(string word) {
     } 
     while (!done);
 
-    cout << "loop done" << endl;
-
     // add characters left to the current node
-    if (word_length_left != 0) {
-        cout << "add node: " << word << endl;
+    if (word.length() != 0) {
         unique_ptr<Node> node = make_unique<Node>(word);
         node.get()->setTerminator(true);
         generateID(node);
