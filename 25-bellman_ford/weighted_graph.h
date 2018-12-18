@@ -120,7 +120,8 @@ class Weighted_Graph {
             int nodes = countNodes();
 
             // visit all nodes
-            for (int i = 0; i < nodes; i++) {
+            int i = node;
+            do {
 
                 // check all connections with their neighbors
                 for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {           
@@ -148,7 +149,9 @@ class Weighted_Graph {
                     cout << solution[i] << " ";
                 }
                 cout << endl;
-            }
+
+                i = (i+1) % nodes;
+            } while (i != node);
             cout << endl;
 
             return changes;
