@@ -82,11 +82,11 @@ class Graph {
         void isDoubleConnected() {
             if (!this->found) {
                 depthFirstSearch();
+                this->found = true;
             }
-            else {
-                for (int i = 0; i < this->bridges.size(); i+=2) {
-                    cout << "\tBridge found between node " << this->bridges[i] << " and node " << this->bridges[i+1]  << endl;
-                }
+
+            for (int i = 0; i < this->bridges.size(); i+=2) {
+                cout << "\tBridge found between node " << this->bridges[i] << " and node " << this->bridges[i+1]  << endl;
             }
 
             for (auto iter = this->articulation_points.begin(); iter != this->articulation_points.end(); iter++) {
@@ -163,8 +163,6 @@ class Graph {
 
                     // bridge found
                     if (visited[node] < lows[*iter]) {
-                        cout << "\tBridge found between node " << node << " and node " << *iter << endl;
-                        this->found = true;
                         this->bridges.push_back(node);
                         this->bridges.push_back(*iter);
 
