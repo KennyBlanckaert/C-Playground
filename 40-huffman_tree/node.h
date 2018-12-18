@@ -4,6 +4,7 @@ class Node {
         /* Fields */
         int n;
         char character;
+		string id;
         Huffman_Tree left;
         Huffman_Tree right;
 
@@ -20,6 +21,11 @@ class Node {
         Node(Node&& other) = default;
         Node& operator=(Node&& other) = default;
 
+        /* Setters */
+        void setId(string id) {
+			this->id = id;
+        }
+
         /* Functions */
-        string draw_recursive(ostream& out, int& counter, char parent);
+        string draw_recursive(ostream& out, int& counter, string parent);
 };

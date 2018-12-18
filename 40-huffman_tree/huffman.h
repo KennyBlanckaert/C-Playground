@@ -20,6 +20,7 @@ class Huffman_Tree : public unique_ptr<Node> {
         /* Functions */
         map<char, int> build(const string& text);
         void draw(const char* filename);
+        void generateID(Huffman_Tree& tree);
 		Huffman_Tree min(vector<Huffman_Tree>& trees);
 };
 

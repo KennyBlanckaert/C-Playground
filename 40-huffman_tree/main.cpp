@@ -15,6 +15,7 @@ using namespace std;
 int main(int argc, char** argv) {
     
     Huffman_Tree huffman("file.txt");
+    huffman.draw("huffman.dot");
     
     return 0;
 }
