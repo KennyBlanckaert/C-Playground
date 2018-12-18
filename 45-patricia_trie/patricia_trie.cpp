@@ -6,6 +6,7 @@ void Patricia_Tree::add(string word) {
     do {
         done = false;
         int failures = 0;
+        
         for (int i = 0; i < current->children.size(); i++) {
             Node* node = current->children[i].get();
             string child_word = node->text;

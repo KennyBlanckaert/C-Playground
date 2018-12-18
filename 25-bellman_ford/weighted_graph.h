@@ -153,6 +153,7 @@ class Weighted_Graph {
 
                 // next node
                 i = (i+1) % nodes;
+                
             } while (i != node);
             cout << endl;
 
