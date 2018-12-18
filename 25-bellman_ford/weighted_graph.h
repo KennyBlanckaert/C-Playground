@@ -144,12 +144,14 @@ class Weighted_Graph {
                     }
                 }
 
+                // Print every step
                 cout << "Node " << i << ": ";
                 for (int i = 0; i < solution.size(); i++) {
                     cout << solution[i] << " ";
                 }
                 cout << endl;
 
+                // next node
                 i = (i+1) % nodes;
             } while (i != node);
             cout << endl;
