@@ -130,6 +130,10 @@ class Weighted_Graph {
                     int weight = iter->second;
 
                     // first time?
+                    if (!init[startNode]) {
+                        continue;
+                    }
+
                     if (!init[endNode]) {
                         solution[endNode] = solution[startNode] + weight;
                         init[endNode] = true;
