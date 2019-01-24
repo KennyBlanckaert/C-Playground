@@ -60,12 +60,12 @@ class Tree : unique_ptr<Node<Key>> {
         // Rotate right if node is left child of his parent
         // Rotate left if node is right child of his parent
         // Stop if node is at the root (no parent)
-        void splay(Tree<Key>* last_added) {
+        void move_to_root(Tree<Key>* node) {
 
-            while (last_added->get()->parent != nullptr) {
+            while (node->get()->parent != nullptr) {
 
                 Tree<Key>* parent = nullptr;
-                Node<Key>* p = last_added->get()->parent;
+                Node<Key>* p = node->get()->parent;
                 if (p->parent) {
                     Node<Key>* tmp = p->parent;
                     if (tmp->left.get() && tmp->left.get()->key == p->key) {
@@ -81,7 +81,7 @@ class Tree : unique_ptr<Node<Key>> {
 
                 cout << "parent = " << parent->get()->key << endl;
 
-                if (parent->get()->left && parent->get()->left.get()->key == last_added->get()->key) {
+                if (parent->get()->left && parent->get()->left.get()->key == node->get()->key) {
                     cout << "rotate right" << endl;
                     parent->rotate(true);
                 }
@@ -91,7 +91,61 @@ class Tree : unique_ptr<Node<Key>> {
                 }
 
                 // Because the node became the parent in rotate()
-                last_added = parent;
+                node = parent;
+            }
+        };
+
+        void splay(Tree<Key>* n) {
+
+            Node<Key>* node = n->get();
+            while (node->parent != nullptr) {
+
+                Tree<Key>* parent = nullptr;
+                Tree<Key>* grandparent = nullptr;
+                getFamily(node, parent, grandparent);
+
+                // perform zig
+                if (grandparent == nullptr) {
+                    if (node == parent->get()->left.get()) {
+                        parent->rotate(true);
+                    }
+                    else if (node == parent->get()->right.get()) {
+                        parent->rotate(false);
+                    }
+                }
+                // perform zig-zag or zig-zag
+                else {
+
+                    // parent is left child of grandparent
+                    if (*parent == grandparent->get()->left) {
+                        
+                        // node is left child of parent
+                        if (parent->get()->left && node == parent->get()->left.get()) {
+                            grandparent->rotate(true);
+                            grandparent->rotate(true);          // because the parent is now rotated into grandparent
+                        }
+                        // node is right child of 
+                        else if (parent->get()->right && node == parent->get()->right.get()) {
+                            parent->rotate(false);
+                            grandparent->rotate(true);
+                        }
+                    }
+                    // parent is right child of grandparent
+                    else if (*parent == grandparent->get()->right) {
+
+                        // node is left child of parent
+                        if (parent->get()->left.get() != 0 && node == parent->get()->left.get()) {
+                            parent->rotate(true);
+                            grandparent->rotate(false);
+                        }
+                        // node is right child of 
+                        else if (parent->get()->right.get() != 0 && node == parent->get()->right.get()) {
+                            cout << parent->get()->key << endl;
+                            grandparent->rotate(false);
+                            grandparent->rotate(false);         // because the parent is now rotated into grandparent
+                        }
+                    }
+                }
             }
         };
 
@@ -105,6 +159,8 @@ class Tree : unique_ptr<Node<Key>> {
                 (*this)->left = move(child.get()->right);
                 child.get()->right = move(*this);
                 *this = move(child);
+
+                
 
                 (*this)->parent = (*this)->right->parent;
                 (*this)->right->parent = this->get();
@@ -125,9 +181,47 @@ class Tree : unique_ptr<Node<Key>> {
                 (*this)->left->parent = this->get();
                 if ((*this)->left->right) {
                     (*this)->left->right->parent = (*this)->left.get();
-                }       
+                }     
             }
         };
+
+        void getFamily(const Node<Key>* c, Tree<Key>*& p, Tree<Key>*& g) {
+            
+            Node<Key>* p_node = c->parent;
+
+            // Zig
+            // parent
+            if (p_node == this->get()) {
+                p = this; 
+            }
+            // Zig-Zig / Zig-Zag
+            // parent & grandparent
+            else {
+
+                // parent
+                Node<Key>* g_node = p_node->parent;
+                if (p_node == g_node->left.get()) {
+                    p = &(g_node->left);
+                }
+                else if (p_node == g_node->right.get()) {
+                    p = &(g_node->right);
+                }
+
+                // grandparent
+                if (g_node == this->get()) {
+                    g = this; 
+                }
+                else {
+                    Node<Key>* gg_node = g_node->parent;
+                    if (g_node == gg_node->left.get()) {
+                        g = &(gg_node->left);
+                    }
+                    else if (g_node == gg_node->right.get()) {
+                        g = &(gg_node->right);
+                    }
+                }
+            }
+        }
 
         void draw(const char* filename) {
 
