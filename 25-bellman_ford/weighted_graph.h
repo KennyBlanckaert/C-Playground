@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <cassert>
+#include <queue>
 #include <fstream>
 #include <algorithm>
 #include <iostream>
@@ -73,12 +74,7 @@ class Weighted_Graph {
             vector<bool> init(nodes, false);
             init[node] = true;
  
-            bool changes = true;
-            int maxIterations = nodes - 1;
-            while (changes && maxIterations != 0) {
-                changes = bellman_ford(node, shortest_paths, init);
-                maxIterations--;
-            }
+            bellman_ford(node, shortest_paths, init);
 
             return shortest_paths;
         };
@@ -115,53 +111,40 @@ class Weighted_Graph {
             return false;
         };
 
-        bool bellman_ford(int node, vector<int>& solution, vector<bool>& init) {
-            bool changes = false;
-            int nodes = countNodes();
+        void bellman_ford(int node, vector<int>& solution, vector<bool>& init) {
+            
+            /* init is used to bypass the 0 initializations of solution */
 
-            // visit all nodes
-            int i = node;
-            do {
+            queue<int> to_process;
+            to_process.push(node);
 
-                // check all connections with their neighbors
-                for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {           
-                    int startNode = i;
+            // start 
+            while (!to_process.empty() {
+
+                // process first node in queue
+                int startNode = to_process.front();
+                to_process.pop();
+
+                // loop all connections
+                for (auto iter = this->connections[startNode].begin(); iter != this->connections[startNode].end(); iter++) {           
                     int endNode = iter->first;
                     int weight = iter->second;
 
                     // first time?
-                    if (!init[startNode]) {
-                        continue;
-                    }
-
                     if (!init[endNode]) {
                         solution[endNode] = solution[startNode] + weight;
                         init[endNode] = true;
-                        changes = true;
+                        to_process.push(endNode);
                         continue;
                     }
 
                     // if (begin_node's score + connection's weight < end_node's score) => change score
                     if (solution[startNode] + weight < solution[endNode]) {
                         solution[endNode] = solution[startNode] + weight;
-                        changes = true;
+                        to_process.push(endNode);
                     }
                 }
-
-                // Print every step
-                cout << "Node " << i << ": ";
-                for (int i = 0; i < solution.size(); i++) {
-                    cout << solution[i] << " ";
-                }
-                cout << endl;
-
-                // next node
-                i = (i+1) % nodes;
-                
-            } while (i != node);
-            cout << endl;
-
-            return changes;
+            }
         };
 
         void visit() {
