@@ -187,7 +187,7 @@ class BNode {
         // number of children
         // is_leaf_node
         // crashtest can not be higher than 3
-        const static int KEYS_IN_NODE = m + 1;
+        const static int KEYS_IN_NODE = m + 2;
         Key key[KEYS_IN_NODE];
         Data data[KEYS_IN_NODE];
         unsigned int index[KEYS_IN_NODE];
