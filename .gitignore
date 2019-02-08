@@ -1,0 +1,28 @@
+# Compiled source #
+###################
+*.exe
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Directories #
+######################
+node_modules/
+.vscode/
+
+# Settings #
+######################
+settings.json
+
+# Logs and databases #
+######################
+*.log
+*.sql
