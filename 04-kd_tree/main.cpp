@@ -27,8 +27,6 @@ int main(int argc, char** argv) {
             int coordinates[COORDINATE_SYSTEM_AXES] = { x_value, y_value };
             Point<COORDINATE_SYSTEM_AXES> point(coordinates);
             tree.add(point);
-
-            // cout << x_value << " " << y_value << endl;
         }
         
         cout << "Tree created" << endl << endl;

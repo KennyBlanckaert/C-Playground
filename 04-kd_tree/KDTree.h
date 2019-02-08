@@ -122,8 +122,8 @@ class KDTree : public unique_ptr<KDNode<k>> {
                 }
             }
 
-            // searching other part of the hypersphere by looking to points within the distance-radius !!!
-
+            // TODO: searching other part of the hypersphere by looking to points within the distance-radius !!!
+            
             return shortest_point;
 
         };

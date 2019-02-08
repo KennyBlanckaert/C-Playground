@@ -95,6 +95,9 @@ class Tree : unique_ptr<Node<Key>> {
             }
         };
 
+        // Note that splay & move_to_root differ:
+        // The only difference is the zig-zag operation that start rotating the grandparent before the parent of the node
+        // This results in a tree that decreases the original depth
         void splay(Tree<Key>* n) {
 
             Node<Key>* node = n->get();

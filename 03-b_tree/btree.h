@@ -59,6 +59,7 @@ class BTree {
         void add(const Key& key, const Data& data) {
             
             // Store max occurences
+            // TODO: change this to an iterator
             this->save(key, data);
 
             // Save or Change data

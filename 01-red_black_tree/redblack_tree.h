@@ -11,19 +11,6 @@
 #include <algorithm>
 #include <cassert>
 
-/*
-    IMPORTANT!!
-
-    this                =>      pointer to RBTree
-    *this               =>      RBTree                         =>  unique_ptr<RBNode<Key>>
-    **this              =>      RBNode
-
-    this->get()         =>      RBNode<Key>>*
-    (*(this->get()))    =>      RBNode<Key>>
-
-    dus (*this)->... spreekt velden het RBNode aan!!
-*/
-
 using namespace std;
 
 // Enumeration color
@@ -50,7 +37,7 @@ class RBTree : public unique_ptr<RBNode<Key>>{
             convertToRed(red_keys);
         };
 
-        // Functie-declarations
+        // Function declarations
         void rotate(bool left) {
             if (left) {
                 RBTree<Key> child = move((*this)->right);
@@ -79,6 +66,7 @@ class RBTree : public unique_ptr<RBNode<Key>>{
                 }
             }
         }
+        
         void add(const Key& key, RBColor color = RBColor::red) {
 
             RBTree<Key>* current = this;
@@ -170,15 +158,8 @@ class RBTree : public unique_ptr<RBNode<Key>>{
                 if (u->get()->color == RBColor::red) {
                     u->get()->color = RBColor::black;
                     p->get()->color = RBColor::black;
-
-                    if (g) {
-                        g->get()->color = RBColor::red;
-                    }
-                    else {
-                        this->get()->color = RBColor::red;
-                    }
+                    g->get()->color = RBColor::red;
                 }
-
                 // Second scenario
                 else if (u->get()->color == RBColor::black) {
 

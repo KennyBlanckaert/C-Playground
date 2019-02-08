@@ -55,6 +55,7 @@ class Boyer_Moore {
             int field_index = this->pattern_length - 1;
             int pattern_index = this->pattern_length - 1;
             while (field_index < this->text_length) {
+                
                 // equal: decrement both indexes
                 if (this->pattern[pattern_index] == this->text[field_index]) {
                     field_index--;

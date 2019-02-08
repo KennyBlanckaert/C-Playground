@@ -70,11 +70,9 @@ class Weighted_Graph {
 
         vector<int> calculate_shortest_paths_from(int node = 0) {
             int nodes = countNodes();
+
             vector<int> shortest_paths(nodes, 0);
-            vector<bool> init(nodes, false);
-            init[node] = true;
- 
-            bellman_ford(node, shortest_paths, init);
+            bellman_ford(node, shortest_paths);
 
             return shortest_paths;
         };
@@ -111,15 +109,18 @@ class Weighted_Graph {
             return false;
         };
 
-        void bellman_ford(int node, vector<int>& solution, vector<bool>& init) {
+        void bellman_ford(int node, vector<int>& solution) {
             
             /* init is used to bypass the 0 initializations of solution */
 
             queue<int> to_process;
             to_process.push(node);
 
+            vector<bool> init(solution.size(), false);
+            init[node] = true;
+
             // start 
-            while (!to_process.empty() {
+            while (!to_process.empty()) {
 
                 // process first node in queue
                 int startNode = to_process.front();

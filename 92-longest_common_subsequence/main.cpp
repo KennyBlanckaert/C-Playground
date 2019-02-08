@@ -21,12 +21,7 @@ int main(int argc, char** argv) {
 	vector<vector<char>> chars(m);
 	vector<vector<int>> table(m+1);
 	for (int i = 0; i < chars.size(); i++) {
-		
 		chars[i].resize(n);
-		chars[i][0] = 0;
-		for (int j = 0; j < chars[i].size(); j++) {
-			chars[0][j] = 0;
-		}
 	}
 	for (int i = 0; i < table.size(); i++) {
 		

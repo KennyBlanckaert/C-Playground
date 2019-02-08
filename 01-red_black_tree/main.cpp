@@ -24,5 +24,5 @@ int main() {
 	// use graphviz to create an image of the tree
 	red_black_tree.draw("red_black_tree_after_add.dot");
 		
-	return 0;
+		return 0;
 }
