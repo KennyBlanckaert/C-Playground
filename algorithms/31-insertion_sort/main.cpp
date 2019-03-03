@@ -6,6 +6,18 @@
 
 using namespace std;
 
+void insertion_sort(vector<int>& numbers);
+ostream& operator << (ostream& os, const vector<int>& array);
+
+int main(int argc, char** argv) {
+
+    vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
+    insertion_sort(numbers);
+    cout << numbers;
+
+    return 0;
+}
+
 void insertion_sort(vector<int>& numbers) {
 
     for (int i = 0; i < numbers.size(); i++) {
@@ -30,13 +42,4 @@ ostream& operator << (ostream& os, const vector<int>& array) {
     os << endl;
     
     return os;
-}
-
-int main(int argc, char** argv) {
-
-    vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
-    insertion_sort(numbers);
-    cout << numbers;
-
-    return 0;
 }
