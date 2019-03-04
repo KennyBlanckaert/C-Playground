@@ -50,7 +50,7 @@ void shell_sort(vector<T>& numbers) {
     index--;
 
     int step = sequence[index];
-    while (step != 0) {
+    while (step > 0) {
         for (int i = 0; i < numbers.size(); i+=step) {
 
             
