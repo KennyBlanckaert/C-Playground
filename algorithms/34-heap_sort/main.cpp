@@ -6,10 +6,16 @@
 
 using namespace std;
 
-void heap_sort(vector<int>& numbers);
-void heapify(vector<int>& numbers, int parent, int size);
+// Declarations
+template<typename T>
+void heap_sort(vector<T>& numbers);
+
+template<typename T>
+void heapify(vector<T>& numbers, int parent, int size);
+
 ostream& operator << (ostream& os, const vector<int>& array);
 
+// Main
 int main(int argc, char** argv) {
 
     vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
@@ -19,7 +25,9 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void heap_sort(vector<int>& numbers) {
+// Definitions
+template<typename T>
+void heap_sort(vector<T>& numbers) {
 
     // change to max-heap array
     int heap_size = numbers.size();
@@ -41,7 +49,8 @@ void heap_sort(vector<int>& numbers) {
     }
 }
 
-void heapify(vector<int>& numbers, int parent, int size) {
+template<typename T>
+void heapify(vector<T>& numbers, int parent, int size) {
 
     int root = parent;
     int left_child = parent * 2 + 1;
@@ -61,6 +70,7 @@ void heapify(vector<int>& numbers, int parent, int size) {
     }
 }
 
+// Operator overloading
 ostream& operator << (ostream& os, const vector<int>& array) {
     
     os << array[0];

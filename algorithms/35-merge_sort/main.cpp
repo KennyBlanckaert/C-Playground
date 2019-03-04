@@ -7,10 +7,16 @@
 
 using namespace std;
 
-void merge_sort(vector<int>& numbers, int left, int right, vector<int>& helper);
-void merge(vector<int>& numbers, int left, int middle, int right, vector<int>& helper);
+// Declarations
+template<typename T>
+void merge_sort(vector<T>& numbers, int left, int right, vector<T>& helper);
+
+template<typename T>
+void merge(vector<T>& numbers, int left, int middle, int right, vector<T>& helper);
+
 ostream& operator << (ostream& os, const vector<int>& array);
 
+// Main
 int main(int argc, char** argv) {
 
     vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
@@ -21,7 +27,9 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void merge_sort(vector<int>& numbers, int left, int right, vector<int>& helper) {
+// Definitions
+template<typename T>
+void merge_sort(vector<T>& numbers, int left, int right, vector<T>& helper) {
     if (left != right) {
         int middle = left + floor((right - left) / 2.0);
         merge_sort(numbers, left, middle, helper);
@@ -30,7 +38,8 @@ void merge_sort(vector<int>& numbers, int left, int right, vector<int>& helper) 
     }
 }
 
-void merge(vector<int>& numbers, int left, int middle, int right, vector<int>& helper) {
+template<typename T>
+void merge(vector<T>& numbers, int left, int middle, int right, vector<T>& helper) {
 
     int i = left;
     int j = middle + 1;
@@ -68,6 +77,7 @@ void merge(vector<int>& numbers, int left, int middle, int right, vector<int>& h
     }
 }
 
+// Operator overloading
 ostream& operator << (ostream& os, const vector<int>& array) {
     
     os << array[0];

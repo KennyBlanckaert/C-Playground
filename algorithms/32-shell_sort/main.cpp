@@ -9,12 +9,19 @@
 
 using namespace std;
 
+// Declarations
 int power(int base, int power);
-void shell_sort(vector<int>& numbers);
+
+template<typename T>
+void shell_sort(vector<T>& numbers);
+
 void generate_tokuda_sequence(int range, vector<int>& sequence);
+
 void generate_sedgewick_sequence(int range, vector<int>& sequence);
+
 ostream& operator << (ostream& os, const vector<int>& array);
 
+// Main
 int main(int argc, char** argv) {
 
     vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
@@ -24,7 +31,9 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void shell_sort(vector<int>& numbers) {
+// Definitions
+template<typename T>
+void shell_sort(vector<T>& numbers) {
 
     vector<int> sequence;
 
@@ -43,15 +52,17 @@ void shell_sort(vector<int>& numbers) {
     int step = sequence[index];
     while (step != 0) {
         for (int i = 0; i < numbers.size(); i+=step) {
+
             
             int j = i - step;
-            int number = numbers[i];
-            while (j >= 0 && number < numbers[j]) {
+            T value = numbers[i];
+
+            while (j >= 0 && value < numbers[j]) {
                 numbers[j+step] = numbers[j];
                 j -= step;
             }
 
-            numbers[j+step] = number;
+            numbers[j+step] = value;
         }
 
         index--;
@@ -85,6 +96,7 @@ int power(int base, int power) {
     return result;
 }
 
+// Operator overloading
 ostream& operator << (ostream& os, const vector<int>& array) {
     
     os << array[0];
