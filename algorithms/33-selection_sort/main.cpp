@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <iostream>
-#include <cmath>
 
 #define LENGTH 20
 
