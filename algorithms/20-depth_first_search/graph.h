@@ -67,14 +67,14 @@ class Graph {
             return connections;
         };
 
-        vector<int> depthFirstSearch(int startNode = 0) {
-            int counter = 0;
-            int nodes = countNodes();
-            vector<int> visited(nodes, -1);
+        void depthFirstSearch(int startNode = 0) {     
             
-            if (isValidNode(startNode)) visit(startNode, visited, counter);
+            int nodes = countNodes();
+            if (isValidNode(startNode)) {
 
-            return visited;
+                vector<bool> visited(nodes, false);
+                visiter(startNode, visited);
+            }
         };
 
         void draw(string filename) const {
@@ -109,14 +109,14 @@ class Graph {
             return false;
         };
 
-        void visit(int node, vector<int>& visited, int& counter) {
-            set<int> neighbors = this->connections[node];
-            visited[node] = counter;
-            counter++;
+        void visiter(int node, vector<bool>& visited) {
+            visited[node] = true;
+            cout << node << " ";
 
+            set<int> neighbors = this->connections[node];
             for (auto iter = neighbors.begin(); iter != neighbors.end(); iter++) {
-                if (visited[*iter] < 0) {
-                    visit(*iter, visited, counter);
+                if (!visited[*iter]) {
+                    visiter(*iter, visited);
                 }
             }
         };

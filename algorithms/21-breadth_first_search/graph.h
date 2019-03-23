@@ -75,7 +75,7 @@ class Graph {
                 queue<int> q;
                 q.push(startNode);
 
-                vector<int> visited(nodes, false);
+                vector<bool> visited(nodes, false);
 
                 visiter(q, visited);
             }
@@ -113,8 +113,9 @@ class Graph {
             return false;
         };
 
-        void visiter(queue<int>& q, vector<int>& visited) {
+        void visiter(queue<int>& q, vector<bool>& visited) {
             visited[q.front()] = true;
+            
             while (!q.empty()) {
                 int node = q.front();
                 q.pop();

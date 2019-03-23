@@ -22,10 +22,7 @@ int main(int argc, char** argv) {
 
     graph.draw("graph.dot");
 
-    vector<int> result = graph.depthFirstSearch();
-    for (auto iter = result.begin(); iter != result.end(); iter++) {
-        cout << *iter << " ";
-    }
+    graph.depthFirstSearch();
 
     return 0;
 }
