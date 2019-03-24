@@ -28,6 +28,8 @@ class HashTable {
                         index++;
                         index %= size;
                     }
+
+                    if (index == start) cout << "Hashtable is full!" << endl; return -1;
                 }   
 
                 shared_ptr<Node> to_add = make_shared<Node>(word);

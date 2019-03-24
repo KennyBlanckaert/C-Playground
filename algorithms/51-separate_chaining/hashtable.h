@@ -21,6 +21,8 @@ class HashTable {
                 unique_ptr<Node> to_add = make_unique<Node>(word);
                 hashtable[index] = move(to_add);
             }
+
+            return index;
         };
 
         void print() {

@@ -21,6 +21,8 @@ class HashTable {
                     index %= size;
                 }
 
+                if (index == start) { cout << "Hashtable is full!" << endl; return -1; }
+
                 shared_ptr<Node> to_add = make_shared<Node>(word);
                 hashtable[index] = move(to_add);
 
@@ -30,6 +32,8 @@ class HashTable {
                 shared_ptr<Node> to_add = make_shared<Node>(word);
                 hashtable[index] = move(to_add);
             }
+
+            return index;
         };
 
         void print() {
