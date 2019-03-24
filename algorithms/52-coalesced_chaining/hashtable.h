@@ -17,12 +17,23 @@ class HashTable {
                     current = current->next.get();
                 }
 
-                int cellar_index = (size - cellar);
-                cellar--;
-                shared_ptr<Node> to_add = make_shared<Node>(word);
-                hashtable[cellar_index] = move(to_add);
+                if (cellar >= 0) {
+                    index = (size - cellar);
+                    cellar--;
+                }
+                else {
+                    int start = index;
+                    index++;
+                    while (hashtable[index].get() && index != start) {
+                        index++;
+                        index %= size;
+                    }
+                }   
 
-                current->next = hashtable[cellar_index];
+                shared_ptr<Node> to_add = make_shared<Node>(word);
+                hashtable[index] = move(to_add);
+
+                current->next = hashtable[index];
             }
             else {
                 shared_ptr<Node> to_add = make_shared<Node>(word);
