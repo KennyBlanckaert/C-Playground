@@ -1,8 +1,11 @@
 #include "node.h"
 
+#define CELLAR 0.20
+#define BASE 0.80
+
 class HashTable {
     public:
-        HashTable(int size) : size(size) { };
+        HashTable(int size) : size(size), base(size*BASE), cellar(size*CELLAR) { };
 
         int addWord(string word) {
             transform(word.begin(), word.end(), word.begin(), ::tolower);
@@ -14,11 +17,15 @@ class HashTable {
                     current = current->next.get();
                 }
 
-                unique_ptr<Node> to_add = make_unique<Node>(word);
-                current->next = move(to_add);
+                int cellar_index = (size - cellar);
+                cellar--;
+                shared_ptr<Node> to_add = make_shared<Node>(word);
+                hashtable[cellar_index] = move(to_add);
+
+                current->next = hashtable[cellar_index];
             }
             else {
-                unique_ptr<Node> to_add = make_unique<Node>(word);
+                shared_ptr<Node> to_add = make_shared<Node>(word);
                 hashtable[index] = move(to_add);
             }
         };
@@ -26,7 +33,7 @@ class HashTable {
         void print() {
             for (int i = 0; i < size; i++) {
                 cout << (i+1) << ": ";
-                printList(hashtable[i].get());
+                printNode(hashtable[i].get());
                 cout << endl;
             }
         }
@@ -38,20 +45,22 @@ class HashTable {
             for (int i = 0; i <= word.length(); i++) {
                 hash *= 10;
                 hash += (word[i] - 'a');
-                hash %= size;
+                hash %= base;
             }
 
             return hash;
         }
 
-        void printList(Node* current) {
-            while (current) {
-                cout << current->word << " ";
-                current = current->next.get();
+        void printNode(Node* current) {
+            if (current) {
+                cout << current->word;
+                if (current->next.get()) cout << " -> " << current->next->word;
             }
         }
 
         /* Fields */
         int size;
-        unique_ptr<Node> hashtable[100];
+        int base;
+        int cellar;
+        shared_ptr<Node> hashtable[100];
 };
