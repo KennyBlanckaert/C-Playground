@@ -7,6 +7,7 @@
 * 2 Graphs
 * 3 Sorting
 * 4 Strings
+* 5 Hashing
 * 9 Dynamic Programming
 
 > https://algoritmen.ahlun.be/Algoritmen *(Website)*  
