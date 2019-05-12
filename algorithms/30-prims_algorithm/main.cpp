@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     graph.addConnection(5, 6, 9);
     graph.draw("graph.dot");
 
-    // graph.prim();
+    graph.prim();
 
     return 0;
 }

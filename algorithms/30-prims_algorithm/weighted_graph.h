@@ -68,6 +68,42 @@ class Weighted_Graph {
             return connections;
         };
 
+        void prim() {
+            int startNode = 0;
+            int nodes = countNodes();
+            vector<int> nodes_in_mob;
+            vector<map<int, T>> neighbor_connections(nodes);
+
+            // Create MOB
+            Weighted_Graph<Direction::UNDIRECTED, int> mob(nodes);
+
+            // Add node to MOB
+            nodes_in_mob.push_back(startNode);
+
+            // Add possible connections
+            addNewNodeConnections(startNode, neighbor_connections);
+
+            while (nodes_in_mob.size() < nodes) {
+            
+                // Find minimum
+                int from;
+                int to;
+                int weight;
+                findMinimumNodeConnection(nodes_in_mob, neighbor_connections, from, to, weight);
+
+                // Add node to MOB
+                nodes_in_mob.push_back(to);
+
+                // Add connection to MOB
+                mob.addConnection(from, to, weight);
+
+                // Add the new connections
+                addNewNodeConnections(to, neighbor_connections);
+            }
+
+            mob.draw("mob.dot");
+        }
+
         void draw(string filename) const {
             ofstream out(filename);
             assert(out);
@@ -90,6 +126,42 @@ class Weighted_Graph {
         };
 
     private:
+
+        void addNewNodeConnections(int node, vector<map<int, T>>& neighbor_connections) {
+            for (auto iter = this->connections[node].begin(); iter != this->connections[node].end(); iter++) {
+                neighbor_connections[node].insert(make_pair(iter->first, iter->second));
+            }
+        }
+
+        void findMinimumNodeConnection(vector<int>& nodes_in_mob, vector<map<int, T>>& neighbor_connections, int& from, int& to, int& weight) {
+            
+            int min;
+            int f;
+            int t;
+            bool init = false; 
+            for (int i = 0; i < neighbor_connections.size(); i++) {
+                for (auto iter = neighbor_connections[i].begin(); iter != neighbor_connections[i].end(); iter++) {
+                    if (find (nodes_in_mob.begin(), nodes_in_mob.end(), iter->first) != nodes_in_mob.end()) {
+                        continue;
+                    }
+                    else if (!init) {
+                        init = true;
+                        f = i;
+                        t = iter->first;
+                        min = iter->second;
+                    }
+                    else if (iter->second < min) {
+                        f = i;
+                        t = iter->first;
+                        min = iter->second;
+                    }
+                }
+            }
+
+            from = f;
+            to = t;
+            weight = min;
+        }
 
         // Functions for verification
         bool isValidNode(int number) const {
