@@ -18,7 +18,7 @@ ostream& operator << (ostream& os, const vector<int>& array);
 int main(int argc, char** argv) {
     srand(time(NULL));
 
-    vector<int> v = { 1, 5, 6, 2, 3, 1, 3, 2, 5, 2, 1, 4, 2, 3, 2, 5, 2, 3, 4, 7 };
+    vector<int> v = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
     quick_sort(v, 0, v.size() - 1);
     cout << v;
 
@@ -37,32 +37,19 @@ int quick_sort(vector<T>& v, int left, int right) {
 
         // partion according to pivot
         int i = left - 1;
-        int dups = 0;
-        if (left < right) {
-            for (int j = left; j < right; j++) {
-                if (v[j] < pivot) {
-                    i++;
-                    swap(v[i], v[j]);
-                }
-                // remove duplicates to combine afterwards
-                else if (v[j] == pivot) {
-                    v.erase(v.begin() + j);
-                    dups++;
-                    right--;
-                    j--;
-                }
+        for (int j = left; j < right; j++) {
+            if (v[j] < pivot) {
+                i++;
+                swap(v[i], v[j]);
             }
-        
-            i++;
-            swap(v[i], v[right]);
-
-            // group all pivot duplicates in the middle
-            for (int k = 0; k < dups; k++) { v.insert(v.begin()+i, pivot); right++; }
-
-            // repeat for left and right part
-            quick_sort(v, left, i - 1);
-            quick_sort(v, i + dups + 1, right);
         }
+    
+        i++;
+        swap(v[i], v[right]);
+
+        // repeat for left and right part
+        quick_sort(v, left, i - 1);
+        quick_sort(v, i + 1, right);
     }
 }
 
