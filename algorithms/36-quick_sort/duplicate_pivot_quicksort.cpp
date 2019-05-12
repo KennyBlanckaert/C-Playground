@@ -37,8 +37,8 @@ void duplicate_pivot_quicksort(vector<T>& numbers, int left, int right) {
         partition(numbers, left, left_pivot, right_pivot, right);
 
         // repeat for partitions (middle partition are duplicates = already in place)
-        duplicate_pivot_quicksort(numbers, left, left_pivot - 1);
-        duplicate_pivot_quicksort(numbers, right_pivot + 1, right);
+        duplicate_pivot_quicksort(numbers, left, left_pivot);
+        duplicate_pivot_quicksort(numbers, right_pivot, right);
     }
 }
 
@@ -49,12 +49,12 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
     T p = numbers[pos];
     swap(numbers[pos], numbers[right]);
 
-    int start = left + 1;
-    int end = right - 1;
+    int start = left;
+    int end = right;
     int j = start;
 
-    cout << "pivot: " << p << endl; 
-    cout << "before: " << numbers;
+    cout << "pivot: " << p << endl;
+    cout << numbers;
 
     // Until start & end meet eachother
     while (start <= end) {
@@ -87,10 +87,10 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
     j--;
     end++;
 
-    swap(numbers[left], numbers[j]);
-    swap(numbers[right], numbers[end]);
-
-    cout << "after: " << numbers << endl;
+    cout << numbers;
+    cout << "left pivot: " << j << endl;
+    cout << "right pivot: " << end << endl << endl;
+    
 
     left_pivot = j;
     right_pivot = end;
