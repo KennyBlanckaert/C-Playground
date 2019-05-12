@@ -9,7 +9,7 @@ using namespace std;
 
 // Declarations
 template<typename T>
-void dual_pivot_quicksort(vector<T>& numbers, int left, int right);
+void duplicate_pivot_quicksort(vector<T>& numbers, int left, int right);
 
 template<typename T>
 void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, int right);
@@ -19,8 +19,8 @@ ostream& operator << (ostream& os, const vector<int>& array);
 // Main
 int main(int argc, char** argv) {
 
-    vector<int> numbers = { 10, 11, 9, 7, 20, 100, 37, 84, 61, 3, 92, 52, 35, 27, 17, 42, 62, 69, 89, 90, 12 };
-    dual_pivot_quicksort(numbers, 0, numbers.size() - 1);
+    vector<int> numbers = { 1, 5, 6, 2, 3, 1, 3, 2, 5, 2, 1, 4, 2, 3, 2, 5, 2, 3, 4, 7 };
+    duplicate_pivot_quicksort(numbers, 0, numbers.size() - 1);
     cout << numbers;
 
     return 0;
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
 // Definitions
 template<typename T>
-void dual_pivot_quicksort(vector<T>& numbers, int left, int right) {
+void duplicate_pivot_quicksort(vector<T>& numbers, int left, int right) {
     if (left < right) {
 
         // partition
@@ -36,30 +36,25 @@ void dual_pivot_quicksort(vector<T>& numbers, int left, int right) {
         int right_pivot;
         partition(numbers, left, left_pivot, right_pivot, right);
 
-        cout << numbers;
-
-        // repeat for partitions
-        dual_pivot_quicksort(numbers, left, left_pivot - 1);
-        dual_pivot_quicksort(numbers, left_pivot + 1, right_pivot - 1);
-        dual_pivot_quicksort(numbers, right_pivot + 1, right);
+        // repeat for partitions (middle partition are duplicates = already in place)
+        duplicate_pivot_quicksort(numbers, left, left_pivot - 1);
+        duplicate_pivot_quicksort(numbers, right_pivot + 1, right);
     }
 }
 
 template<typename T>
 void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, int right) {
 
-    // start condition
-    // left = left_pivot, right = right_pivot
-    if (numbers[left] > numbers[right]) {
-        swap(numbers[left], numbers[right]);
-    }
-
-    T p = numbers[left];
-    T q = numbers[right];
+    int pos = (rand() % (right - left)) + left;
+    T p = numbers[pos];
+    swap(numbers[pos], numbers[right]);
 
     int start = left + 1;
     int end = right - 1;
     int j = start;
+
+    cout << "pivot: " << p << endl; 
+    cout << "before: " << numbers;
 
     // Until start & end meet eachother
     while (start <= end) {
@@ -69,10 +64,10 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
             swap(numbers[start], numbers[j]);
             j++;
         }
-        else if (numbers[start] >= q) {
+        else if (numbers[start] > p) {
 
             // Decrease end until a number is found that does not belong to the third partition
-            while (numbers[end] > q && start < end) {
+            while (numbers[end] > p && start < end) {
                 end--;
             }
 
@@ -94,6 +89,8 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
 
     swap(numbers[left], numbers[j]);
     swap(numbers[right], numbers[end]);
+
+    cout << "after: " << numbers << endl;
 
     left_pivot = j;
     right_pivot = end;
