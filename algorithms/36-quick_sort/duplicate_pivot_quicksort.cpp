@@ -53,9 +53,6 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
     int end = right;
     int j = start;
 
-    cout << "pivot: " << p << endl;
-    cout << numbers;
-
     // Until start & end meet eachother
     while (start <= end) {
 
@@ -86,12 +83,7 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
     }
     j--;
     end++;
-
-    cout << numbers;
-    cout << "left pivot: " << j << endl;
-    cout << "right pivot: " << end << endl << endl;
     
-
     left_pivot = j;
     right_pivot = end;
 }
