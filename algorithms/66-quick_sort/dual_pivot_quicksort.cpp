@@ -36,8 +36,6 @@ void dual_pivot_quicksort(vector<T>& numbers, int left, int right) {
         int right_pivot;
         partition(numbers, left, left_pivot, right_pivot, right);
 
-        cout << numbers;
-
         // repeat for partitions
         dual_pivot_quicksort(numbers, left, left_pivot - 1);
         dual_pivot_quicksort(numbers, left_pivot + 1, right_pivot - 1);

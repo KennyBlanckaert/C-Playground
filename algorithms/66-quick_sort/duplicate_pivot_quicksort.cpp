@@ -47,7 +47,6 @@ void partition(vector<T>& numbers, int left, int& left_pivot, int& right_pivot, 
 
     int pos = (rand() % (right - left)) + left;
     T p = numbers[pos];
-    swap(numbers[pos], numbers[right]);
 
     int start = left;
     int end = right;

@@ -42,7 +42,7 @@ T select_operator(vector<T>& v, int k) {
     int left = 0;
     int right = v.size() - 1;
 
-    while (left < right - 1) {
+    while (left < right) {
 
         // partition table with pivot_pos in the middle
         int pivot_pos = quick_sort_step(v, left, right);
@@ -75,17 +75,15 @@ int quick_sort_step(vector<T>& v, int left, int right) {
 
     // partion according to pivot
     int i = left - 1;
-    if (left < right) {
-        for (int j = left; j < right; j++) {
-            if (v[j] <= pivot) {
-                i++;
-                swap(v[i], v[j]);
-            }
+    for (int j = left; j < right; j++) {
+        if (v[j] <= pivot) {
+            i++;
+            swap(v[i], v[j]);
         }
-    
-        i++;
-        swap(v[i], v[right]);
     }
+
+    i++;
+    swap(v[i], v[right]);
 
     return i;
 }

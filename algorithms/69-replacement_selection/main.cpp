@@ -18,7 +18,8 @@ void fill_heap(queue<int>& input, vector<int>& heap);
 
 int empty(vector<queue<int>> runs);
 
-ostream& operator << (ostream &os, queue<int> my_queue);
+template<typename T>
+ostream& operator << (ostream &os, queue<T> my_queue);
 
 template<typename T>
 ostream& operator << (ostream &os, vector<T> my_queue);
@@ -146,8 +147,9 @@ void fill_heap(queue<int>& input, vector<int>& heap) {
     } 
 }
 
-//Operator overloading
-ostream& operator << (ostream &os, queue<int> my_queue) {	
+// Operator overloading
+template<typename T>
+ostream& operator << (ostream &os, queue<T> my_queue) {	
     
     while(!my_queue.empty())
     {
