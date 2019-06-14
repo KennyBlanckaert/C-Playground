@@ -32,13 +32,13 @@ class HashTable {
                     if (index == start) cout << "Hashtable is full!" << endl; return -1;
                 }   
 
-                shared_ptr<Node> to_add = make_shared<Node>(word);
+                unique_ptr<Node> to_add = make_unique<Node>(word);
                 hashtable[index] = move(to_add);
 
-                current->next = hashtable[index];
+                current->next = move(hashtable[index]);
             }
             else {
-                shared_ptr<Node> to_add = make_shared<Node>(word);
+                unique_ptr<Node> to_add = make_unique<Node>(word);
                 hashtable[index] = move(to_add);
             }
         };
@@ -67,7 +67,10 @@ class HashTable {
         void printNode(Node* current) {
             if (current) {
                 cout << current->word;
-                if (current->next.get()) cout << " -> " << current->next->word;
+                while (current->next.get()) {
+                    cout << " -> " << current->next->word;
+                    current = current->next.get();
+                }
             }
         }
 
@@ -75,5 +78,5 @@ class HashTable {
         int size;
         int base;
         int cellar;
-        shared_ptr<Node> hashtable[100];
+        unique_ptr<Node> hashtable[100];
 };

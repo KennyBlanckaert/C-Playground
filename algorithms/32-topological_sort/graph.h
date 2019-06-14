@@ -72,11 +72,19 @@ class Graph {
         void topological_sort() {
             int nodes = countNodes();
 
-            Graph copy = *this;
-            queue<int> zero_degrees;
+            // Calculate indegrees
             vector<int> in_degrees(nodes);
-            calculateInDegree(copy, in_degrees, zero_degrees);
+            calculateInDegree(in_degrees);
 
+            // Store zero_degrees
+            queue<int> zero_degrees;
+            for (int i = 0; i < in_degrees.size(); i++) {
+                if (in_degrees[i] == 0) {
+                    zero_degrees.push(i);
+                }
+            }
+
+            // Find all nodes
             while (!zero_degrees.empty()) {
                 int node = zero_degrees.front();
                 zero_degrees.pop();
@@ -115,19 +123,12 @@ class Graph {
 
     private:
 
-        void calculateInDegree(Graph graph, vector<int>& in_degrees, queue<int>& zero_degrees) {
+        void calculateInDegree(vector<int>& in_degrees) {
             
             // Calculate in_degrees
             for (int i = 0; i < this->connections.size(); i++) {
                 for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {
                     in_degrees[*iter]++;
-                }
-            }
-
-            // Store zero_degrees
-            for (int i = 0; i < in_degrees.size(); i++) {
-                if (in_degrees[i] == 0) {
-                    zero_degrees.push(i);
                 }
             }
         }

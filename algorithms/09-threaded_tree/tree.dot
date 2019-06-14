@@ -1,0 +1,30 @@
+digraph {
+"50"[label="50"];
+"30"[label="30"];
+"20"[label="20"];
+"10"[label="10"];
+"10" -> "20" [style=dashed, color=grey]
+"20" -> "10";
+"20" -> "30" [style=dashed, color=grey]
+"30" -> "20";
+"40"[label="40"];
+"40" -> "30" [style=dashed, color=grey]
+"49"[label="49"];
+"49" -> "40" [style=dashed, color=grey]
+"49" -> "50" [style=dashed, color=grey]
+"40" -> "49";
+"30" -> "40";
+"50" -> "30";
+"100"[label="100"];
+"100" -> "50" [style=dashed, color=grey]
+"110"[label="110"];
+"105"[label="105"];
+"105" -> "100" [style=dashed, color=grey]
+"105" -> "110" [style=dashed, color=grey]
+"110" -> "105";
+"120"[label="120"];
+"120" -> "110" [style=dashed, color=grey]
+"110" -> "120";
+"100" -> "110";
+"50" -> "100";
+}

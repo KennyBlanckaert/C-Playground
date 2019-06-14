@@ -80,14 +80,8 @@ class Weighted_Graph {
             // Create MOB
             Weighted_Graph<Direction::UNDIRECTED, int> mob(nodes);
 
-            // First connection adds 2 nodes
-            int from, to, weight;
-            findLowestConnectionWithoutLoop(nodes_in_mob, mob, from, to, weight);
-            mob.addConnection(from, to, weight);
-            nodes_in_mob.insert(from);
-            nodes_in_mob.insert(to);
-
             // keep adding connections until all nodes are in the MOB
+            int from, to, weight;
             while (nodes_in_mob.size() < nodes) {
                 findLowestConnectionWithoutLoop(nodes_in_mob, mob, from, to, weight);
                 mob.addConnection(from, to, weight);
@@ -98,6 +92,7 @@ class Weighted_Graph {
             // if there are 2 separate components, combine them
             vector<bool> visited(nodes, false);
             mob.visiter(0, visited);
+            
             if (find(visited.begin(), visited.end(), false) != visited.end()) {
                 findLowestConnectionWithoutLoop(nodes_in_mob, mob, from, to, weight, true);
                 mob.addConnection(from, to, weight);

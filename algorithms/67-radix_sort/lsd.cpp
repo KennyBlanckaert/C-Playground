@@ -15,6 +15,7 @@ int power(int base, int raise);
 void radix_sort(vector<int>& numbers);
 void radix_sort(vector<string>& numbers);
 
+// NOTE: insertion sort is used since radix sort requires a STABLE algorithm (insertion sort, selection sort, merge sort)
 void insertion_sort(vector<int>& v, int base);
 void insertion_sort(vector<string>& v, int index);
 
