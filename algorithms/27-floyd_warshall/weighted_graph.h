@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <iostream>
 
+#define INFINITY 1000000
+
 enum Direction { DIRECTED=1, UNDIRECTED=0 }; 
 
 template<Direction direction, class T>
@@ -68,6 +70,18 @@ class Weighted_Graph {
             return connections;
         };
 
+        vector<vector<int>> floyd_algorithm(int node = 0) {
+
+            int nodes = countNodes();
+            vector<vector<int>> matrix(nodes);
+
+            buildMatrix(matrix);
+
+            floyd(matrix);
+
+            return matrix;
+        }
+
         void draw(string filename) const {
             ofstream out(filename);
             assert(out);
@@ -99,6 +113,39 @@ class Weighted_Graph {
 
             return false;
         };
+
+        void buildMatrix(vector<vector<int>>& matrix) {
+            
+            int size = matrix.size();
+            for (int i = 0; i < matrix.size(); i++) {
+                matrix[i].resize(size, INFINITY);
+                matrix[i][i] = 0;
+
+                for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {
+                    int endNode = iter->first;
+                    int weight = iter->second;
+                    
+                    matrix[i][endNode] = weight;
+                }
+            }
+        }
+
+        void floyd(vector<vector<int>>& matrix) {
+            
+            int nodes = countNodes();
+            for (int i = 0; i < matrix.size(); i++) {
+                for (int j = 0; j < matrix[i].size(); j++) {
+                    if (matrix[i][j] == INFINITY) {
+
+                        for (int k = 0; k < nodes; k++) {
+                            if (matrix[k][j] != 0 && matrix[i][k] != 0 && matrix[i][k] + matrix[k][j] < matrix[i][j]) {
+                                matrix[i][j] = matrix[i][k] + matrix[k][j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // Fields
         vector<map<int, T>> connections;
