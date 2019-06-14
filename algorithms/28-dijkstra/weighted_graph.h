@@ -68,6 +68,15 @@ class Weighted_Graph {
             return connections;
         };
 
+        vector<int> dijkstra_algorithm(int node = 0) {
+            int nodes = countNodes();
+
+            vector<int> shortest_paths(nodes, 0);
+            dijkstra(node, shortest_paths);
+
+            return shortest_paths;
+        };
+
         void draw(string filename) const {
             ofstream out(filename);
             assert(out);
@@ -100,6 +109,49 @@ class Weighted_Graph {
             return false;
         };
 
+        void dijkstra(int node, vector<int>& solution) {
+            
+            /* init is used to bypass the 0 initializations of solution */
+
+            queue<int> to_process;
+            to_process.push(node);
+
+            vector<bool> init(solution.size(), false);
+            init[node] = true;
+
+            // start 
+            while (!to_process.empty()) {
+
+                // process first node in queue
+                int startNode = to_process.front();
+                to_process.pop();
+
+                // loop all connections
+                for (auto iter = this->connections[startNode].begin(); iter != this->connections[startNode].end(); iter++) {           
+                    int endNode = iter->first;
+                    int weight = iter->second;
+
+                    // first time?
+                    if (!init[endNode]) {
+                        solution[endNode] = solution[startNode] + weight;
+                        init[endNode] = true;
+                        to_process.push(endNode);
+                        continue;
+                    }
+
+                    // if (begin_node's score + connection's weight < end_node's score) => change score
+                    if (solution[startNode] + weight < solution[endNode]) {
+                        solution[endNode] = solution[startNode] + weight;
+                        to_process.push(endNode);
+                    }
+                }
+            }
+        };
+
+        void visit() {
+
+        };
+        
         // Fields
         vector<map<int, T>> connections;
 };

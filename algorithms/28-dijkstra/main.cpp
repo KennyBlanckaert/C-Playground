@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
     graph.addConnection(5, 6, 5);
     graph.addConnection(4, 5, 20);
 
-    vector<int> shortest_paths = graph.calculate_shortest_paths_from(5);
+    vector<int> shortest_paths = graph.dijkstra_algorithm(5);
 
     cout << "RESULT: " << endl;
     for (int i = 0; i < shortest_paths.size(); i++) {

@@ -3,21 +3,20 @@
 #include <string>
 #include <map>
 #include <cassert>
-#include <queue>
 #include <fstream>
 #include <algorithm>
 #include <iostream>
 
-enum Direction { DIRECTED=1, UNDIRECTED=0 }; 
+ enum Direction { DIRECTED=1, UNDIRECTED=0 }; 
 
-template<Direction direction, class T>
+ template<Direction direction, class T>
 class Weighted_Graph {
     public:
 
-        // Constructor
+         // Constructor
         Weighted_Graph(int nodes = 0) : connections(nodes) { };
 
-        // Functions
+         // Functions
         Direction getDirection() const {
             return direction;
         };
@@ -32,7 +31,7 @@ class Weighted_Graph {
                 cout << "Unvalid nodes! \n";
             }
 
-            if (direction == Direction::DIRECTED) {
+             if (direction == Direction::DIRECTED) {
                 this->connections[from].insert(make_pair(to, weight));
             }
             else {
@@ -46,7 +45,7 @@ class Weighted_Graph {
                 throw "Unvalid nodes!";
             }
 
-            if (direction == Direction::DIRECTED) {
+             if (direction == Direction::DIRECTED) {
                 this->connections[from].erase(to);
             }
             else {
@@ -65,40 +64,49 @@ class Weighted_Graph {
                 connections += this->connections[i].size();
             }
 
-            return connections;
+             return connections;
         };
 
-        vector<int> calculate_shortest_paths_from(int node = 0) {
-            int nodes = countNodes();
+        vector<int> bellman_ford_algorithm(int node = 0) {
 
+            int nodes = countNodes();
+            vector<bool> init(nodes, false);
             vector<int> shortest_paths(nodes, 0);
-            bellman_ford(node, shortest_paths);
+            
+            init[node] = true;
+
+            bool changes = true;
+            int maxIterations = nodes - 1;
+            while (changes && maxIterations != 0) {
+                changes = bellman_ford(node, shortest_paths, init);
+                maxIterations--;
+            }
 
             return shortest_paths;
         };
 
-        void draw(string filename) const {
+         void draw(string filename) const {
             ofstream out(filename);
             assert(out);
 
-            out << "digraph {\n";
+             out << "digraph {\n";
 
-            int nodes = countNodes();
+             int nodes = countNodes();
             while (--nodes != -1) {
                 out << '"' << nodes << "\"[label=\"" << nodes << "\"];" << endl;
             }
 
-            for (int node = 0; node < countNodes(); node++) {
+             for (int node = 0; node < countNodes(); node++) {
 
-                for (auto iter = this->connections[node].begin(); iter != this->connections[node].end(); iter++) {
+                 for (auto iter = this->connections[node].begin(); iter != this->connections[node].end(); iter++) {
                     out << '"' << node << "\" -> \"" << iter->first << "\";" << endl;
                 }
             }
 
-             out << "}";
+              out << "}";
         };
 
-    private:
+     private:
 
         // Functions for verification
         bool isValidNode(int number) const {
@@ -106,52 +114,52 @@ class Weighted_Graph {
                 return true;
             }
 
-            return false;
+             return false;
         };
 
-        void bellman_ford(int node, vector<int>& solution) {
-            
-            /* init is used to bypass the 0 initializations of solution */
+        bool bellman_ford(int node, vector<int>& solution, vector<bool>& init) {
+            bool changes = false;
+            int nodes = countNodes();
 
-            queue<int> to_process;
-            to_process.push(node);
+            // visit all nodes
+            int i = node;
+            do {
 
-            vector<bool> init(solution.size(), false);
-            init[node] = true;
-
-            // start 
-            while (!to_process.empty()) {
-
-                // process first node in queue
-                int startNode = to_process.front();
-                to_process.pop();
-
-                // loop all connections
-                for (auto iter = this->connections[startNode].begin(); iter != this->connections[startNode].end(); iter++) {           
+                 // check all connections with their neighbors
+                for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {           
+                    int startNode = i;
                     int endNode = iter->first;
                     int weight = iter->second;
 
-                    // first time?
-                    if (!init[endNode]) {
-                        solution[endNode] = solution[startNode] + weight;
-                        init[endNode] = true;
-                        to_process.push(endNode);
+                    if (!init[startNode]) {
                         continue;
                     }
 
-                    // if (begin_node's score + connection's weight < end_node's score) => change score
+                     // first time?
+                    if (!init[endNode]) {
+                        solution[endNode] = solution[startNode] + weight;
+                        init[endNode] = true;
+                        changes = true;
+                        continue;
+                    }
+
+                     // if (begin_node's score + connection's weight < end_node's score) => change score
                     if (solution[startNode] + weight < solution[endNode]) {
                         solution[endNode] = solution[startNode] + weight;
-                        to_process.push(endNode);
+                        changes = true;
                     }
                 }
-            }
+
+                i = (i+1) % nodes;
+            } while (i != node);
+
+            return changes;
         };
 
-        void visit() {
+         void visit() {
 
-        };
-        
-        // Fields
+         };
+
+         // Fields
         vector<map<int, T>> connections;
 };
