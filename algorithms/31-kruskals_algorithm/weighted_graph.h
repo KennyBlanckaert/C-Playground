@@ -73,29 +73,57 @@ class Weighted_Graph {
 
         void kruskal() {
             int nodes = countNodes();
+
+            // Nodes in MOB
             set<int> nodes_in_mob;
 
             // Create MOB
             Weighted_Graph<Direction::UNDIRECTED, int> mob(nodes);
 
-            // keep adding connections until all nodes are in the MOB
-            int from, to, weight;
-            while (nodes_in_mob.size() < nodes) {
-                findLowestConnectionWithoutLoop(nodes_in_mob, mob, from, to, weight);
-                mob.addConnection(from, to, weight);
-                nodes_in_mob.insert(from);
-                nodes_in_mob.insert(to);
+            // Build priority queue
+            priority_queue<pair<int, pair<int, int>>> sorted_connections;
+            fillPriorityQueue(sorted_connections);
+
+            // Start adding connections
+            while (!sorted_connections.empty()) {
+                pair<int, pair<int, int>> conn = sorted_connections.top();
+                sorted_connections.pop();
+
+                if (find(nodes_in_mob.begin(), nodes_in_mob.end(), conn.second.first) == nodes_in_mob.end() || find(nodes_in_mob.begin(), nodes_in_mob.end(), conn.second.first) == nodes_in_mob.end()) {
+                    nodes_in_mob.insert(conn.second.first);
+                    nodes_in_mob.insert(conn.second.second);
+
+                    mob.addConnection(conn.second.first, conn.second.second, conn.first);
+                }
             }
 
-            // if there are 2 separate components, combine them
+            // Verify connectivity
             vector<bool> visited(nodes, false);
-            mob.visiter(0, visited);
-            
-            if (find(visited.begin(), visited.end(), false) != visited.end()) {
-                findLowestConnectionWithoutLoop(nodes_in_mob, mob, from, to, weight, true);
-                mob.addConnection(from, to, weight);
-                nodes_in_mob.insert(from);
-                nodes_in_mob.insert(to);
+            visiter(0, visited);
+
+            // Connect components if needed
+            bool init = false;
+            int from, to, lowest_weight;
+            if (find(visited.begin(), visited.end(), true) != visited.end()) {
+                for (int i = 0; i < this->connections.size(); i++) {
+                    for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {
+                        if (mob.connections[i].find(iter->first) == mob.connections[i].end()) {
+                            if (!init) {
+                                from = i;
+                                to = iter->first;
+                                lowest_weight = iter->second;
+                                init = true;
+                            }
+                            else if (iter->second < lowest_weight) {
+                                from = i;
+                                to = iter->first;
+                                lowest_weight = iter->second;
+                            }
+                        }
+                    }
+                }
+
+                mob.addConnection(from, to, lowest_weight);
             }
 
             mob.draw("mob.dot");
@@ -134,60 +162,12 @@ class Weighted_Graph {
         };
 
     private:
-
-        void findLowestConnectionWithoutLoop(set<int>& nodes_in_mob, Weighted_Graph& mob, int& from, int& to, int& weight, bool connect = false) {
-
-            int f;
-            int t;
-            int lowest;
-            bool init = false;
-
-            // Iterate over all connections
+        void fillPriorityQueue(priority_queue<pair<int, pair<int, int>>>& sorted_connections) {
             for (int i = 0; i < this->connections.size(); i++) {
                 for (auto iter = this->connections[i].begin(); iter != this->connections[i].end(); iter++) {
-                    
-                    // IF connect is TRUE, two components must be connected to finish the MOB
-                    if (!connect) { 
-
-                        // FROM or TO node cannot not be in the MOB
-                        if (find(nodes_in_mob.begin(), nodes_in_mob.end(), i) == nodes_in_mob.end() || find(nodes_in_mob.begin(), nodes_in_mob.end(), iter->first) == nodes_in_mob.end()) {
-                            if (!init) {
-                                f = i;
-                                t = iter->first;
-                                lowest = iter->second;
-                                init = true;
-                            }
-                            else if (iter->second < lowest) {
-                                f = i;
-                                t = iter->first;
-                                lowest = iter->second;
-                            }
-                        }
-                    }
-                    else {
-
-                        // Find the lowest connection that is not in the MOB
-                        if (mob.connections[i].find(iter->first) == mob.connections[i].end()) {
-                            if (!init) {
-                                f = i;
-                                t = iter->first;
-                                lowest = iter->second;
-                                init = true;
-                            }
-                            else if (iter->second < lowest) {
-                                f = i;
-                                t = iter->first;
-                                lowest = iter->second;
-                            }
-                        }
-                    }
+                    sorted_connections.push(make_pair(-iter->second, make_pair(i, iter->first)));
                 }
             }
-
-            from = f;
-            to = t;
-            weight = lowest;
-
         }
 
         // Functions for verification
