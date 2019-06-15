@@ -61,7 +61,7 @@ T select_operator(vector<T>& v, int k) {
         }
     }
 
-    return v[k - 1];
+    return v[search];
 }
 
 /* MUST GUARANTEE PERFECT PARTIIONING (previous quicksort version isn't always perfectly partioned) */

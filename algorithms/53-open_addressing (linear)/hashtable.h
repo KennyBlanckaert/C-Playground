@@ -9,10 +9,6 @@ class HashTable {
             int index = hash(word);
 
             if (hashtable[index].get()) {
-                Node* current = hashtable[index].get();
-                while (current->next.get()) {
-                    current = current->next.get();
-                }
 
                 int start = index;
                 index++;
@@ -25,8 +21,6 @@ class HashTable {
 
                 unique_ptr<Node> to_add = make_unique<Node>(word);
                 hashtable[index] = move(to_add);
-
-                current->next = move(hashtable[index]);
             }
             else {
                 unique_ptr<Node> to_add = make_unique<Node>(word);
@@ -60,10 +54,6 @@ class HashTable {
         void printNode(Node* current) {
             if (current) {
                 cout << current->word;
-                while (current->next.get()) {
-                    cout << " -> " << current->next->word;
-                    current = current->next.get();
-                }
             }
         }
 

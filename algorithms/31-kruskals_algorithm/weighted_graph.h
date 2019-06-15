@@ -71,8 +71,6 @@ class Weighted_Graph {
             return connections;
         };
 
-        
-
         void kruskal() {
             int nodes = countNodes();
             set<int> nodes_in_mob;

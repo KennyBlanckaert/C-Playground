@@ -3,7 +3,6 @@ class Node {
 
         /* Fields */
         string word;
-        shared_ptr<Node> next;
 
         /* Constructors & Destructor */
         Node() { };
