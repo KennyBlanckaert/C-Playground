@@ -68,37 +68,35 @@ class Weighted_Graph {
             return connections;
         };
 
-        void prim() {
-            int startNode = 0;
+        void prim(int startNode = 0) {
+
             int nodes = countNodes();
             vector<int> nodes_in_mob;
-            vector<map<int, T>> neighbor_connections(nodes);
+            priority_queue<pair<int, pair<int, int>>> neighbor_connections;
 
             // Create MOB
             Weighted_Graph<Direction::UNDIRECTED, int> mob(nodes);
 
             // Add node to MOB
             nodes_in_mob.push_back(startNode);
-
-            // Add possible connections
-            addNewNodeConnections(startNode, neighbor_connections);
+            addNodeConnections(startNode, neighbor_connections);
 
             while (nodes_in_mob.size() < nodes) {
             
-                // Find minimum
-                int from;
-                int to;
-                int weight;
-                findMinimumNodeConnection(nodes_in_mob, neighbor_connections, from, to, weight);
+                pair<int, pair<int, int>> conn = neighbor_connections.top();
+                neighbor_connections.pop();
 
-                // Add node to MOB
-                nodes_in_mob.push_back(to);
+                int from = conn.second.first;
+                int to = conn.second.second;
+                int weight = conn.first;
 
-                // Add connection to MOB
-                mob.addConnection(from, to, weight);
+                // Add node to MOB if not already added
+                if (find(nodes_in_mob.begin(), nodes_in_mob.end(), to) == nodes_in_mob.end()) {
+                    nodes_in_mob.push_back(to);
+                    addNodeConnections(to, neighbor_connections);
 
-                // Add the new connections
-                addNewNodeConnections(to, neighbor_connections);
+                    mob.addConnection(from, to, weight);
+                }
             }
 
             mob.draw("mob.dot");
@@ -127,9 +125,9 @@ class Weighted_Graph {
 
     private:
 
-        void addNewNodeConnections(int node, vector<map<int, T>>& neighbor_connections) {
+        void addNodeConnections(int node, priority_queue<pair<int, pair<int, int>>>& neighbor_connections) {
             for (auto iter = this->connections[node].begin(); iter != this->connections[node].end(); iter++) {
-                neighbor_connections[node].insert(make_pair(iter->first, iter->second));
+                neighbor_connections.push(make_pair(-iter->second, make_pair(node, iter->first)));
             }
         }
 
