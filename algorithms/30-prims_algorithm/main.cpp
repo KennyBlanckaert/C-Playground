@@ -11,11 +11,11 @@ int main(int argc, char** argv) {
     graph.addConnection(0, 1, 2);
     graph.addConnection(0, 2, 3);
     graph.addConnection(0, 3, 3);
-    graph.addConnection(1, 3, 4);
+    graph.addConnection(1, 2, 4);
     graph.addConnection(1, 4, 3);
-    graph.addConnection(2, 5, 7);
-    graph.addConnection(3, 4, 1);
-    graph.addConnection(3, 5, 6);
+    graph.addConnection(2, 3, 5);
+    graph.addConnection(2, 4, 1);
+    graph.addConnection(3, 5, 7);
     graph.addConnection(4, 5, 8);
     graph.addConnection(5, 6, 9);
     graph.draw("graph.dot");
