@@ -4,10 +4,10 @@
 
 * 0 Trees
 * 1 Heaps
-* 2 Graphs
-* 3 Sorting
+* 2-3 Graphs
 * 4 Strings
 * 5 Hashing
+* 6 Sorting
 * 9 Dynamic Programming
 
 > https://algoritmen.ahlun.be/Algoritmen *(Website)*  
