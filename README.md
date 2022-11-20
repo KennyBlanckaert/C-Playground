@@ -1,4 +1,4 @@
-# C-++ Algorithms
+# C++ Algorithms
 
 ## Algorithms
 
